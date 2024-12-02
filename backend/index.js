@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import connectDB from "./lib/connectDB.js";
 import express from "express";
 import animalRoutes from "./routes/animal.route.js";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());

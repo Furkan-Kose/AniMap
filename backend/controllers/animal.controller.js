@@ -16,6 +16,16 @@ export const createAnimal = async (req, res) => {
     res.status(201).json(animal);
 }
 
+export const updateAnimal = async (req, res) => {
+    const { id } = req.params;
+    const updatedAnimal = await Animal.findByIdAndUpdate(
+        id,
+        req.body,
+        { new: true, runValidators: true }
+    );
+    res.status(200).json(updatedAnimal);
+};
+
 export const deleteAnimal = async (req, res) => {
     const animal = await Animal.findByIdAndDelete(req.params.id);
     res.status(204).json(animal);
