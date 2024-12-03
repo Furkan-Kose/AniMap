@@ -2,10 +2,12 @@ import dotenv from "dotenv";
 import connectDB from "./lib/connectDB.js";
 import express from "express";
 import animalRoutes from "./routes/animal.route.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
+app.use(cors(process.env.CLIENT_URL));
 app.use(express.json());
 
 app.use("/animals", animalRoutes);

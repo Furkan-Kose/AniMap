@@ -9,7 +9,7 @@ const animalSchema = new Schema(
     },
     gender: {
       type: String, 
-      enum: ['Erkek', 'Dişi'],
+      // enum: ['Erkek', 'Dişi', 'Bilinmiyor'],
     },
     color: {
       type: String, 
