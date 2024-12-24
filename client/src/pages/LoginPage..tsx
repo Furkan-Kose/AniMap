@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import useUserStore from "../stores/UserStore";
 
 
 const loginUser = async (userData: any) => {
@@ -15,12 +16,14 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { setUser } = useUserStore();
 
   const { mutate: login, isPending, isError, error } = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
       toast.success("User logged in successfully");
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      setUser(data);
       navigate("/");
     },
     onError: (error: any) => {
@@ -42,7 +45,7 @@ const LoginPage = () => {
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
-      <h1 className="text-2xl font-bold text-yellow-500 text-center">Login</h1>
+      <h1 className="text-3xl font-bold text-yellow-500 text-center">Login</h1>
       <form onSubmit={handleLogin} className="flex flex-col gap-4 py-8 w-2/3 md:w-1/2 mx-auto">
         <input
             id="email"

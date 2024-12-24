@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router";
 import axios from "axios";
 import Loading from "./Loading";
-
+import useUserStore from "../stores/UserStore";
 
 const logoutUser = async () => {
   const response = await axios.post(
@@ -20,13 +20,20 @@ const fetchUser = async () => {
 };
 
 const Header = () => {
+  const { user, setUser } = useUserStore();
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { isPending, error, data: user } = useQuery({
+  const { isPending, error, data } = useQuery({
     queryKey: ["user"],
     queryFn: () => fetchUser(),
-    refetchOnWindowFocus: false,
+    onSuccess: (data: any) => {
+      if (data) setUser(data);
+    },
+    onError: () => {
+      setUser(null);
+    },
   });
 
   const { mutate: logout } = useMutation({
@@ -34,12 +41,17 @@ const Header = () => {
     onSuccess: () => {
       toast.success("Successfully logged out!");
       queryClient.resetQueries({ queryKey: ["user"] });
+      setUser(null);
       navigate("/login");
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Logout failed!");
     },
   });
+
+  console.log("user"+user);
+  console.log("username"+user?.user.username);
+  console.log("data"+data);
 
   // if (isPending) return <Loading />;
 

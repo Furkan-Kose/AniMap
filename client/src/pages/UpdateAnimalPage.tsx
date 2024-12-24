@@ -3,11 +3,37 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
 import Loading from "../components/Loading";
+import Select from "react-select";
 
 const fetchAnimal = async (id: string) => {
   const res = await axios.get(`http://localhost:3000/animals/${id}`);
   return res.data;
 };
+
+const genderOptions = [
+  { value: "Erkek", label: "Erkek" },
+  { value: "Dişi", label: "Dişi" },
+  { value: "Bilinmiyor", label: "Bilinmiyor" },
+];
+
+const healthStatusOptions = [
+  { value: "Sağlıklı", label: "Sağlıklı" },
+  { value: "Yaralı", label: "Yaralı" },
+  { value: "Hasta", label: "Hasta" },
+  { value: "Kritik", label: "Kritik Durumda" },
+  { value: "Bilinmiyor", label: "Bilinmiyor" },
+];
+
+const colorOptions = [
+  { value: "Beyaz", label: "Beyaz" },
+  { value: "Siyah", label: "Siyah" },
+  { value: "Gri", label: "Gri" },
+  { value: "Kahverengi", label: "Kahverengi" },
+  { value: "Sarı", label: "Sarı" },
+  { value: "Turuncu", label: "Turuncu" },
+  { value: "Tekir", label: "Çizgili (Tekir)" },
+  { value: "Alacalı", label: "Benekli (Alacalı)" },
+];
 
 const UpdateAnimalPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,11 +48,15 @@ const UpdateAnimalPage = () => {
 
   const mutation = useMutation({
     mutationFn: async (updatedAnimal: any) => {
-      return axios.put(`http://localhost:3000/animals/${id}`, updatedAnimal);
-},
+      return axios.put(`http://localhost:3000/animals/${id}`, updatedAnimal, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["animals"] });
-        queryClient.invalidateQueries({ queryKey: ["animal", id] });
+      queryClient.invalidateQueries({ queryKey: ["animals"] });
+      queryClient.invalidateQueries({ queryKey: ["animal", id] });
       toast.success("Hayvan başarıyla güncellendi.");
       navigate("/");
     },
@@ -35,36 +65,24 @@ const UpdateAnimalPage = () => {
     },
   });
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
 
-    const formData = new FormData(e.target);
-
-    const data = {
-        image: formData.get("image"),
-        species: formData.get("species"),
-        description: formData.get("description"),
-        gender: formData.get("gender"),
-        color: formData.get("color"),
-        healthStatus: formData.get("healthStatus"),
-    }
-
-    mutation.mutate(data);
+    mutation.mutate(formData);
   };
 
-    if (isPending) return <Loading />;
-
-    if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
+  if (isPending) return <Loading />;
+  if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
-      <h1 className="text-2xl font-bold text-yellow-500 text-center">Hayvan Güncelle</h1>
+      <h1 className="text-3xl font-bold text-yellow-500 text-center">Hayvan Güncelle</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-8 w-1/2 mx-auto">
         <input
           name="image"
-          type="text"
-          defaultValue={animal?.image || ""}
-          placeholder="Resim URL"
+          type="file"
+          accept="image/*"
           className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
         <input
@@ -81,27 +99,31 @@ const UpdateAnimalPage = () => {
           placeholder="Açıklama"
           className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
-        <input
+        
+        {/* Gender Select */}
+        <Select
           name="gender"
-          type="text"
-          defaultValue={animal?.gender || ""}
-          placeholder="Cinsiyet"
-          className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
+          options={genderOptions}
+          defaultValue={genderOptions.find(option => option.value === animal?.gender)}
+          className="react-select-container"
         />
-        <input
+
+        {/* Color Select */}
+        <Select
           name="color"
-          type="text"
-          defaultValue={animal?.color || ""}
-          placeholder="Renk"
-          className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
+          options={colorOptions}
+          defaultValue={colorOptions.find(option => option.value === animal?.color)}
+          className="react-select-container"
         />
-        <input
+
+        {/* Health Status Select */}
+        <Select
           name="healthStatus"
-          type="text"
-          defaultValue={animal?.healthStatus || ""}
-          placeholder="Sağlık Durumu"
-          className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
+          options={healthStatusOptions}
+          defaultValue={healthStatusOptions.find(option => option.value === animal?.healthStatus)}
+          className="react-select-container"
         />
+
         <button
           disabled={mutation.isPending}
           className="bg-yellow-500 text-white p-2 rounded-md"
