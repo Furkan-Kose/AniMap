@@ -1,29 +1,23 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
-import useUserStore from "../stores/UserStore";
+import { useAuth } from "../context/AuthContext";
 
-
-const loginUser = async (userData: any) => {
-  const response = await axios.post("http://localhost:3000/users/login", userData, {withCredentials: true});
-  return response.data;
-};
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { setUser } = useUserStore();
+  const { loginFunc } = useAuth();
+
 
   const { mutate: login, isPending, isError, error } = useMutation({
-    mutationFn: loginUser,
-    onSuccess: (data) => {
+    mutationFn: loginFunc,
+    onSuccess: () => {
       toast.success("User logged in successfully");
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      setUser(data);
       navigate("/");
     },
     onError: (error: any) => {
@@ -45,7 +39,7 @@ const LoginPage = () => {
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
-      <h1 className="text-3xl font-bold text-yellow-500 text-center">Login</h1>
+      <h1 className="text-3xl font-bold text-yellow-500 text-center">Giriş Yap</h1>
       <form onSubmit={handleLogin} className="flex flex-col gap-4 py-8 w-2/3 md:w-1/2 mx-auto">
         <input
             id="email"
@@ -53,7 +47,7 @@ const LoginPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="Email"
+            placeholder="E-Posta"
             className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
         <input
@@ -62,7 +56,7 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            placeholder="Password"
+            placeholder="Şifre"
             className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
         <button
@@ -70,7 +64,7 @@ const LoginPage = () => {
           disabled={isPending}
           className="bg-yellow-500 text-white p-2 rounded-md"
         >
-          {isPending ? "Logging in..." : "Login"}
+          {isPending ? "Giriş Yapılıyor..." : "Giriş Yap"}
         </button>
       </form>
       {isError && <p className="text-red-500 text-center">{error.message}</p>}

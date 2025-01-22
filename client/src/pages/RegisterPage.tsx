@@ -40,7 +40,7 @@ const RegisterPage = () => {
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
-      <h1 className="text-3xl font-bold text-yellow-500 text-center">Register</h1>
+      <h1 className="text-3xl font-bold text-yellow-500 text-center">Kayıt Ol</h1>
       <form onSubmit={handleRegister} className="flex flex-col gap-4 py-8 w-2/3 md:w-1/2 mx-auto">
         <input
             id="username"
@@ -48,7 +48,7 @@ const RegisterPage = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            placeholder="Username"
+            placeholder="Kullanıcı Adı"
             className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
         <input
@@ -57,7 +57,7 @@ const RegisterPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="Email"
+            placeholder="E-Posta"
             className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
         <input
@@ -66,7 +66,7 @@ const RegisterPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            placeholder="Password"
+            placeholder="Şifre"
             className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
         <button
@@ -74,7 +74,7 @@ const RegisterPage = () => {
           disabled={isPending}
           className="bg-yellow-500 text-white p-2 rounded-md"
         >
-          {isPending ? "Registering..." : "Register"}
+          {isPending ? "Kayıt Olunuyor..." : "Kayıt Ol"}
         </button>
       </form>
       {isError && <p className="text-red-500 text-center">{error.message}</p>}

@@ -9,7 +9,6 @@ const animalSchema = new Schema(
     },
     gender: {
       type: String, 
-      // enum: ['Erkek', 'Dişi', 'Bilinmiyor'],
     },
     color: {
       type: String, 
@@ -18,17 +17,6 @@ const animalSchema = new Schema(
       type: String,
       default: 'Bilinmiyor',
     },
-    // location: {
-    //   type: {
-    //     type: String,
-    //     enum: ['Point'], 
-    //     required: true,
-    //   },
-    //   coordinates: {
-    //     type: [Number], 
-    //     required: true,
-    //   },
-    // },
     image: {
       type: String, 
     },
@@ -36,10 +24,16 @@ const animalSchema = new Schema(
       type: String,
       maxlength: 500,
     },
-    // addedBy: {
-    //   type: mongoose.Schema.Types.ObjectId, 
-    //   ref: 'User', 
-    // },
+    location: {
+      latitude: {
+        type: Number,
+
+      },
+      longitude: {
+        type: Number,
+   
+      },
+    },
   },
   { timestamps: true } 
 );

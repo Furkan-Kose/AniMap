@@ -1,47 +1,20 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router";
-import axios from "axios";
-import Loading from "./Loading";
-import useUserStore from "../stores/UserStore";
+import { useAuth } from "../context/AuthContext";
 
-const logoutUser = async () => {
-  const response = await axios.post(
-    "http://localhost:3000/users/logout",
-    {},
-    { withCredentials: true }
-  );
-  return response.data;
-};
-
-const fetchUser = async () => {
-  const response = await axios.get("http://localhost:3000/users/me", { withCredentials: true });
-  return response.data;
-};
 
 const Header = () => {
-  const { user, setUser } = useUserStore();
+  const { user, logoutFunc } = useAuth();
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { isPending, error, data } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => fetchUser(),
-    onSuccess: (data: any) => {
-      if (data) setUser(data);
-    },
-    onError: () => {
-      setUser(null);
-    },
-  });
-
   const { mutate: logout } = useMutation({
-    mutationFn: logoutUser,
+    mutationFn: logoutFunc,
     onSuccess: () => {
       toast.success("Successfully logged out!");
       queryClient.resetQueries({ queryKey: ["user"] });
-      setUser(null);
       navigate("/login");
     },
     onError: (error: any) => {
@@ -49,11 +22,6 @@ const Header = () => {
     },
   });
 
-  console.log("user"+user);
-  console.log("username"+user?.user.username);
-  console.log("data"+data);
-
-  // if (isPending) return <Loading />;
 
   return (
     <div className="flex items-center justify-center gap-8 h-20">
@@ -67,7 +35,7 @@ const Header = () => {
         user ? (
           <>
             <Link to="/profile" className="text-2xl font-bold text-gray-800 hover:underline">
-              {user.user.username}
+              {user.username}
             </Link>
             <button
               onClick={() => logout()}

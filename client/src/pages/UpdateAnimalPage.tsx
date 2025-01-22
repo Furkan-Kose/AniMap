@@ -4,36 +4,15 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
 import Loading from "../components/Loading";
 import Select from "react-select";
+import { colorOptions, genderOptions, healthStatusOptions } from "../constants/data";
+import ImageUploadModal from "../components/ImageUploadModal";
+import LocationModal from "../components/LocationModal";
+import { useState } from "react";
 
 const fetchAnimal = async (id: string) => {
   const res = await axios.get(`http://localhost:3000/animals/${id}`);
   return res.data;
 };
-
-const genderOptions = [
-  { value: "Erkek", label: "Erkek" },
-  { value: "Dişi", label: "Dişi" },
-  { value: "Bilinmiyor", label: "Bilinmiyor" },
-];
-
-const healthStatusOptions = [
-  { value: "Sağlıklı", label: "Sağlıklı" },
-  { value: "Yaralı", label: "Yaralı" },
-  { value: "Hasta", label: "Hasta" },
-  { value: "Kritik", label: "Kritik Durumda" },
-  { value: "Bilinmiyor", label: "Bilinmiyor" },
-];
-
-const colorOptions = [
-  { value: "Beyaz", label: "Beyaz" },
-  { value: "Siyah", label: "Siyah" },
-  { value: "Gri", label: "Gri" },
-  { value: "Kahverengi", label: "Kahverengi" },
-  { value: "Sarı", label: "Sarı" },
-  { value: "Turuncu", label: "Turuncu" },
-  { value: "Tekir", label: "Çizgili (Tekir)" },
-  { value: "Alacalı", label: "Benekli (Alacalı)" },
-];
 
 const UpdateAnimalPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -45,6 +24,16 @@ const UpdateAnimalPage = () => {
   });
 
   const queryClient = useQueryClient();
+
+  const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({
+    latitude: animal?.location?.latitude || null,
+    longitude: animal?.location?.longitude || null,
+  });
+
+  const [image, setImage] = useState<string | null>(animal?.image || "");
+  const [tempImage, setTempImage] = useState<string | null>(animal?.image || "");
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [isLocationModalOpen, setLocationModalOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async (updatedAnimal: any) => {
@@ -69,7 +58,27 @@ const UpdateAnimalPage = () => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
 
+    if (location.latitude && location.longitude) {
+      formData.append("location", JSON.stringify(location));
+    }
+
+    if (image) {
+      formData.append("image", image);
+    }
+
     mutation.mutate(formData);
+  };
+
+  const handleSave = (image: any, tempImage: any) => {
+    setImage(image);
+    setTempImage(tempImage);
+    setImageModalOpen(false);
+  };
+
+  const handleLocationSave = (position: [number, number]) => {
+    const [latitude, longitude] = position;
+    setLocation({ latitude, longitude });
+    setLocationModalOpen(false);
   };
 
   if (isPending) return <Loading />;
@@ -79,12 +88,6 @@ const UpdateAnimalPage = () => {
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
       <h1 className="text-3xl font-bold text-yellow-500 text-center">Hayvan Güncelle</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-8 w-1/2 mx-auto">
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
-        />
         <input
           name="species"
           type="text"
@@ -99,24 +102,18 @@ const UpdateAnimalPage = () => {
           placeholder="Açıklama"
           className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
         />
-        
-        {/* Gender Select */}
         <Select
           name="gender"
           options={genderOptions}
           defaultValue={genderOptions.find(option => option.value === animal?.gender)}
           className="react-select-container"
         />
-
-        {/* Color Select */}
         <Select
           name="color"
           options={colorOptions}
           defaultValue={colorOptions.find(option => option.value === animal?.color)}
           className="react-select-container"
         />
-
-        {/* Health Status Select */}
         <Select
           name="healthStatus"
           options={healthStatusOptions}
@@ -124,13 +121,43 @@ const UpdateAnimalPage = () => {
           className="react-select-container"
         />
 
-        <button
-          disabled={mutation.isPending}
-          className="bg-yellow-500 text-white p-2 rounded-md"
-        >
+        <div className="flex gap-4">
+          <button
+            type="button"
+            className="w-1/2 border border-yellow-500 p-2 rounded-md"
+            onClick={() => setImageModalOpen(true)}
+          >
+            Resim Güncelle
+          </button>
+
+          <button
+            type="button"
+            className="w-1/2 border border-yellow-500 p-2 rounded-md"
+            onClick={() => setLocationModalOpen(true)}
+          >
+            Konum Güncelle
+          </button>
+        </div>
+
+        <img src={`http://localhost:3000/${animal.image}`} alt="" className="w-1/3 mx-auto" />
+
+        {location.latitude && location.longitude && (
+          <div className="flex items-center justify-center gap-4">
+            <p>Enlem: {location.latitude}</p>
+            <p>|</p>
+            <p>Boylam: {location.longitude}</p>
+          </div>
+        )}
+
+        <button disabled={mutation.isPending} className="bg-yellow-500 text-white p-2 rounded-md">
           Güncelle
         </button>
       </form>
+
+      {isImageModalOpen && <ImageUploadModal onClose={() => setImageModalOpen(false)} onSave={handleSave} />}
+      {isLocationModalOpen && (
+        <LocationModal onClose={() => setLocationModalOpen(false)} onSave={handleLocationSave} />
+      )}
     </div>
   );
 };

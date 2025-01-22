@@ -6,4 +6,8 @@ export type AnimalType = {
     healthStatus: string;
     description: string;
     image?: string;
+    location?: {
+        latitude?: number;
+        longitude?: number;
+    };
 };

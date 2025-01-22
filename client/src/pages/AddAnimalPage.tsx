@@ -3,10 +3,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import Select from "react-select";
+import { useState } from "react";
+import ImageUploadModal from "../components/ImageUploadModal";
+import { genderOptions, colorOptions, healthStatusOptions } from "../constants/data";
+import LocationModal from "../components/LocationModal";
 
 const AddAnimalPage = () => {
+  const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [isLocationModalOpen, setLocationModalOpen] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [tempImage, setTempImage] = useState<string | null>(null);
 
   const mutation = useMutation({
     mutationFn: async (newAnimal) => {
@@ -21,7 +30,8 @@ const AddAnimalPage = () => {
       toast.success("Hayvan başarıyla eklendi.");
       navigate("/");
     },
-    onError: () => {
+    onError: (error) => {
+      console.log("error" + error);
       toast.error("Hayvan eklenirken bir hata oluştu.");
     },
   });
@@ -29,44 +39,35 @@ const AddAnimalPage = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData: any = new FormData(e.target as HTMLFormElement);
-    mutation.mutate(formData);
+
+    if (location.latitude && location.longitude) {
+      formData.append("location", JSON.stringify(location));
+    }
+
+    if (image) {
+      formData.append("image", image);
+    }
+
+    mutation.mutate(formData); 
   };
 
-  const genderOptions = [
-    { value: "Erkek", label: "Erkek" },
-    { value: "Dişi", label: "Dişi" },
-    { value: "Bilinmiyor", label: "Bilinmiyor" },
-  ];
+  const handleSave = (image: any, tempImage: any) => {
+    setImage(image);
+    setTempImage(tempImage);
+    setImageModalOpen(false);
+  };
+
+  const handleLocationSave = (position: [number, number]) => {
+    const [latitude, longitude] = position;
+    setLocation({ latitude, longitude });
+    setLocationModalOpen(false); 
+  };
   
-  const healthStatusOptions = [
-    { value: "Sağlıklı", label: "Sağlıklı" },
-    { value: "Yaralı", label: "Yaralı" },
-    { value: "Hasta", label: "Hasta" },
-    { value: "Kritik", label: "Kritik Durumda" },
-    { value: "Bilinmiyor", label: "Bilinmiyor" },
-  ];
-  
-  const colorOptions = [
-    { value: "Beyaz", label: "Beyaz" },
-    { value: "Siyah", label: "Siyah" },
-    { value: "Gri", label: "Gri" },
-    { value: "Kahverengi", label: "Kahverengi" },
-    { value: "Sarı", label: "Sarı" },
-    { value: "Turuncu", label: "Turuncu" },
-    { value: "Tekir", label: "Çizgili (Tekir)" },
-    { value: "Alacalı", label: "Benekli (Alacalı)" },
-  ];  
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
       <h1 className="text-3xl font-bold text-yellow-500 text-center">Hayvan Ekle</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-8 w-2/3 md:w-1/2 mx-auto">
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          className="border border-gray-400 p-2 rounded-md outline-1 outline-yellow-500"
-        />
         <input
           name="species"
           type="text"
@@ -100,10 +101,46 @@ const AddAnimalPage = () => {
           className="react-select-container"
           classNamePrefix="react-select"
         />
+
+        <div className="flex gap-4">
+          <button 
+            type="button"
+            className="w-1/2 border border-yellow-500 p-2 rounded-md"
+            onClick={() => setImageModalOpen(true)}
+          >
+            Resim Ekle
+          </button>
+
+          <button 
+            type="button"
+            className="w-1/2 border border-yellow-500 p-2 rounded-md"
+            onClick={() => setLocationModalOpen(true)}
+          >
+            Konum Ekle
+          </button>
+        </div>
+
+        <img src={tempImage || ""} alt="" className={tempImage ? "w-1/3 mx-auto" : ""} />
+
+        {location.latitude && location.longitude && (
+          <div className="flex items-center justify-center gap-4">
+            <p>Enlem: {location.latitude}</p>
+            <p>|</p>
+            <p>Boylam: {location.longitude}</p>
+          </div>
+        )}
+
         <button disabled={mutation.isPending} className="bg-yellow-500 text-white p-2 rounded-md">
           Ekle
         </button>
       </form>
+
+      {isImageModalOpen && <ImageUploadModal onClose={() => setImageModalOpen(false)} onSave={handleSave} />}
+      
+      {isLocationModalOpen && <LocationModal 
+        onClose={() => setLocationModalOpen(false)} 
+        onSave={handleLocationSave}
+      />}
     </div>
   );
 };

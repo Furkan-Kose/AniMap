@@ -60,9 +60,7 @@ export const login = async (req, res) => {
   generateToken(res, user._id);
 
   res.status(200).json({
-    success: true,
-    message: "User logged in successfully",
-    user,
+    user
   });
 };
 

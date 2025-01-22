@@ -12,10 +12,29 @@ export const getAnimal = async (req, res) => {
 }
 
 export const createAnimal = async (req, res) => {
-    const newAnimal = new Animal({ ...req.body, image: req.file.path });
+    const { species, description, gender, color, healthStatus, location } = req.body;
+
+    let latitude, longitude;
+    if (location) {
+        const parsedLocation = JSON.parse(location);
+        latitude = parsedLocation.latitude;
+        longitude = parsedLocation.longitude;
+    }
+
+    const newAnimal = new Animal({
+        species,
+        description,
+        gender,
+        color,
+        healthStatus,
+        location: { latitude, longitude },
+        image: req.file ? req.file.path : null
+    });
+
     const animal = await newAnimal.save();
     res.status(201).json(animal);
 }
+
 
 export const updateAnimal = async (req, res) => {
     const { id } = req.params;
@@ -28,6 +47,19 @@ export const updateAnimal = async (req, res) => {
     const oldImagePath = existingAnimal.image;
 
     let updateData = { ...req.body };
+
+    if (req.body.location) {
+        try {
+            const parsedLocation = JSON.parse(req.body.location);
+            updateData.location = { 
+                latitude: parsedLocation.latitude, 
+                longitude: parsedLocation.longitude 
+            };
+        } catch (error) {
+            return res.status(400).json({ message: 'Geçersiz konum verisi.' });
+        }
+    }
+
     if (req.file) {
         fs.unlinkSync(oldImagePath);
         updateData.image = req.file.path;
@@ -37,6 +69,7 @@ export const updateAnimal = async (req, res) => {
 
     res.status(200).json(updatedAnimal);
 };
+
 
 export const deleteAnimal = async (req, res) => {
     const animal = await Animal.findByIdAndDelete(req.params.id);
