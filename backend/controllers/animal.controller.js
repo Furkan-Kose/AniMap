@@ -28,7 +28,8 @@ export const createAnimal = async (req, res) => {
         color,
         healthStatus,
         location: { latitude, longitude },
-        image: req.file ? req.file.path : null
+        image: req.file ? req.file.path : null,
+        // owner: req.user._id,
     });
 
     const animal = await newAnimal.save();
@@ -43,6 +44,10 @@ export const updateAnimal = async (req, res) => {
     if (!existingAnimal) {
         return res.status(404).json({ message: 'Hayvan bulunamadı.' });
     }
+
+    // if (req.user.role !== 'admin' && existingAnimal.owner.toString() !== req.user.id) {
+    //     return res.status(403).json({ message: 'Bu hayvanı güncelleme yetkiniz yok.' });
+    // }
 
     const oldImagePath = existingAnimal.image;
 
@@ -77,6 +82,10 @@ export const deleteAnimal = async (req, res) => {
     if (!animal) {
         return res.status(404).json({ message: 'Hayvan bulunamadı.' });
     }
+
+    // if (req.user.role !== 'admin' && animal.owner.toString() !== req.user.id) {
+    //     return res.status(403).json({ message: 'Bu hayvanı silmeye yetkiniz yok.' });
+    // }
 
     const imagePath = animal.image;
     await fs.unlink(imagePath);

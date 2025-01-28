@@ -5,12 +5,10 @@ import { AnimalType } from "../types";
 import Loading from "../components/Loading";
 import { Link } from "react-router";
 import AnimalMap from "../components/AnimalMap";
+import { useAuth } from "../context/AuthContext";
+import { apiURL, fetchAnimals } from "../lib/api";
 
 
-const fetchAnimals = async () => {
-    const res = await axios.get('http://localhost:3000/animals');
-    return res.data;
-}
 
 const HomePage = () => {
 
@@ -52,7 +50,7 @@ const HomePage = () => {
                         className="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out"
                     >
                         <img
-                            src={`http://localhost:3000/${animal.image}`}
+                            src={`${apiURL}/${animal.image}`}
                             alt={animal.species}
                             className="w-full h-48 object-cover rounded-t-xl"
                         />

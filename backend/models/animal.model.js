@@ -27,12 +27,14 @@ const animalSchema = new Schema(
     location: {
       latitude: {
         type: Number,
-
       },
       longitude: {
         type: Number,
-   
       },
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   { timestamps: true } 

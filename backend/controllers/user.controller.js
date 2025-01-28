@@ -90,3 +90,49 @@ export const getMe = async (req, res) => {
   });
 };
 
+
+export const getAllUsers = async (req, res) => {
+  const users = await User.find().select('-password');
+  res.status(200).json(users);
+}
+
+export const getUserById = async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password');
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+  res.status(200).json(user);
+}
+
+export const updateUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+
+  user.username = req.body.username || user.username;
+  user.email = req.body.email || user.email;
+  user.role = req.body.role || user.role;
+  user.password = req.body.password || user.password;
+
+  await user.save();
+  res.status(200).json({
+    success: true,
+    user
+  });
+}
+
+
+export const deleteUser = async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return res.status(404).json({ success: false, message: 'User not found' });
+  }
+
+  await user.remove();
+  res.status(200).json({
+    success: true,
+    message: 'User deleted successfully',
+  });
+}
+

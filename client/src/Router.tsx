@@ -6,6 +6,10 @@ import UpdateAnimalPage from "./pages/UpdateAnimalPage";
 import LoginPage from "./pages/LoginPage.";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
+import AdminLayout from "./layouts/AdminLayout";
+import Dashboard from "./admin/Dashboard";
+import AdminUsersPage from "./admin/AdminUsersPage";
+import AdminAnimalsPage from "./admin/AdminAnimalsPage";
 
 
 export const router = createBrowserRouter([
@@ -35,6 +39,23 @@ export const router = createBrowserRouter([
         {
           path: "/profile",
           element: <ProfilePage />
+        }
+      ]
+    },
+    {
+      element: <AdminLayout />,
+      children: [
+        {
+          path: "/admin",
+          element: <Dashboard />
+        },
+        {
+          path: "/admin/users",
+          element: <AdminUsersPage />
+        },
+        {
+          path: "/admin/animals",
+          element: <AdminAnimalsPage />
         }
       ]
     }

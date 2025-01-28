@@ -28,14 +28,20 @@ const ProfilePage = () => {
           <h2 className="text-xl font-semibold mb-4">Kullanıcı Bilgileri</h2>
 
           <div className="mb-4">
-            <label className="block text-gray-700">Kullanıcı Adı</label>
+            <label className="block text-gray-700">Kullanıcı Adı:</label>
             <p className="mt-2">{user?.user.username || "Veri bulunamadı"}</p>
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700">E-posta</label>
+            <label className="block text-gray-700">E-posta:</label>
             <p className="mt-2">{user?.user.email || "Veri bulunamadı"}</p>
           </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700">Rol:</label>
+            <p className="mt-2">{user?.user.role || "Veri bulunamadı"}</p>
+          </div>
+
         </div>
       </div>
     </div>
