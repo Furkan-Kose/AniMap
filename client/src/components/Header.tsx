@@ -28,6 +28,9 @@ const Header = () => {
       <Link to="/" className="text-2xl font-bold text-gray-800 hover:underline">
         Ana Sayfa
       </Link>
+      <Link to="/animals" className="text-2xl font-bold text-gray-800 hover:underline">
+        Hayvanlar
+      </Link>
       <Link to="/add" className="text-2xl font-bold text-gray-800 hover:underline">
         Hayvan Ekle
       </Link>

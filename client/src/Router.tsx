@@ -10,6 +10,9 @@ import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./admin/Dashboard";
 import AdminUsersPage from "./admin/AdminUsersPage";
 import AdminAnimalsPage from "./admin/AdminAnimalsPage";
+import AdminUpdateAnimalPage from "./admin/AdminUpdateAnimalPage";
+import AdminAddAnimalPage from "./admin/AdminAddAnimalPage";
+import AnimalsPage from "./pages/AnimalsPage";
 
 
 export const router = createBrowserRouter([
@@ -19,6 +22,10 @@ export const router = createBrowserRouter([
         {
             path: "/",
             element: <HomePage />
+        },
+        {
+            path: "/animals",
+            element: <AnimalsPage />
         },
         {
             path: "/add",
@@ -56,6 +63,14 @@ export const router = createBrowserRouter([
         {
           path: "/admin/animals",
           element: <AdminAnimalsPage />
+        },
+        {
+          path: "/admin/animals/update/:id",
+          element: <AdminUpdateAnimalPage />
+        },
+        {
+          path: "/admin/animals/add",
+          element: <AdminAddAnimalPage />
         }
       ]
     }
