@@ -45,10 +45,6 @@ export const updateAnimal = async (req, res) => {
         return res.status(404).json({ message: 'Hayvan bulunamadı.' });
     }
 
-    // if (req.user.role !== 'admin' && existingAnimal.owner.toString() !== req.user.id) {
-    //     return res.status(403).json({ message: 'Bu hayvanı güncelleme yetkiniz yok.' });
-    // }
-
     const oldImagePath = existingAnimal.image;
 
     let updateData = { ...req.body };
@@ -82,10 +78,6 @@ export const deleteAnimal = async (req, res) => {
     if (!animal) {
         return res.status(404).json({ message: 'Hayvan bulunamadı.' });
     }
-
-    // if (req.user.role !== 'admin' && animal.owner.toString() !== req.user.id) {
-    //     return res.status(403).json({ message: 'Bu hayvanı silmeye yetkiniz yok.' });
-    // }
 
     const imagePath = animal.image;
     await fs.unlink(imagePath);

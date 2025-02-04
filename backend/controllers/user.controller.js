@@ -129,10 +129,38 @@ export const deleteUser = async (req, res) => {
     return res.status(404).json({ success: false, message: 'User not found' });
   }
 
-  await user.remove();
+  await User.findByIdAndDelete(req.params.id);
+
   res.status(200).json({
     success: true,
     message: 'User deleted successfully',
+  });
+}
+
+export const createUser = async (req, res) => {
+  const { email, password, username, role } = req.body;
+
+  if (!email || !password || !username) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'All fields are required' 
+    });
+  }
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(409).json({
+      success: false, 
+      message: "User already exists" 
+    });
+  }
+
+  const user = await User.create({ email, password, username, role });
+
+  res.status(201).json({
+    success: true,
+    message: "User created successfully",
+    user,
   });
 }
 

@@ -13,6 +13,8 @@ import AdminAnimalsPage from "./admin/AdminAnimalsPage";
 import AdminUpdateAnimalPage from "./admin/AdminUpdateAnimalPage";
 import AdminAddAnimalPage from "./admin/AdminAddAnimalPage";
 import AnimalsPage from "./pages/AnimalsPage";
+import AdminAddUserPage from "./admin/AdminAddUserPage";
+import AdminUpdateUserPage from "./admin/AdminUpdateUserPage";
 
 
 export const router = createBrowserRouter([
@@ -71,6 +73,14 @@ export const router = createBrowserRouter([
         {
           path: "/admin/animals/add",
           element: <AdminAddAnimalPage />
+        },
+        {
+          path: "/admin/users/add",
+          element: <AdminAddUserPage />
+        },
+        {
+          path: "/admin/users/update/:id",
+          element: <AdminUpdateUserPage />
         }
       ]
     }

@@ -16,7 +16,7 @@ const HomePage = () => {
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
       <h1 className="text-3xl font-bold text-center text-yellow-500">Hayvanlar</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 py-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 py-8">
         {animals.map((animal: any) => (
           <AnimalCard key={animal._id} animal={animal} />
         ))}

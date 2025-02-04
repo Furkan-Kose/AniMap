@@ -33,7 +33,7 @@ const AdminAddAnimalPage = () => {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["animals"] });
         toast.success("Hayvan başarıyla eklendi.");
-        navigate("/");
+        navigate("/admin/animals");
       },
       onError: (error) => {
         console.log("error" + error);
