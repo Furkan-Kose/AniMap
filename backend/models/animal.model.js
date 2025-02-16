@@ -32,10 +32,10 @@ const animalSchema = new Schema(
         type: Number,
       },
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
+    owner: { 
+      type: Schema.Types.ObjectId, 
+      ref: 'User', 
+    }
   },
   { timestamps: true } 
 );

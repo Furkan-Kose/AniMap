@@ -42,8 +42,8 @@ const AnimalsPage = () => {
         >
           <option value="">Tüm Türler</option>
           {speciesOptions.map((species) => (
-            <option key={species} value={species}>
-              {species}
+            <option key={species as string} value={species as string}>
+              {species as string}
             </option>
           ))}
         </select>
@@ -70,8 +70,8 @@ const AnimalsPage = () => {
         >
           <option value="">Tüm Sağlık Durumları</option>
           {healthStatusOptions.map((status) => (
-            <option key={status} value={status}>
-              {status}
+            <option key={status as string} value={status as string}>
+              {status as string}
             </option>
           ))}
         </select>

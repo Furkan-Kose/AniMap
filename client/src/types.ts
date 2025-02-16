@@ -10,4 +10,10 @@ export type AnimalType = {
         latitude?: number;
         longitude?: number;
     };
+    owner: {
+        _id: string;
+        username?: string;
+        email?: string;
+    };
+    createdAt: string;
 };

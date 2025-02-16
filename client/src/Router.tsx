@@ -15,6 +15,7 @@ import AdminAddAnimalPage from "./admin/AdminAddAnimalPage";
 import AnimalsPage from "./pages/AnimalsPage";
 import AdminAddUserPage from "./admin/AdminAddUserPage";
 import AdminUpdateUserPage from "./admin/AdminUpdateUserPage";
+import AnimalDetailsPage from "./pages/AnimalDetailsPage";
 
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
         {
             path: "/animals",
             element: <AnimalsPage />
+        },
+        {
+            path: "/animals/:id",
+            element: <AnimalDetailsPage />  
         },
         {
             path: "/add",

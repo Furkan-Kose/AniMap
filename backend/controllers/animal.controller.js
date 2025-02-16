@@ -2,12 +2,12 @@ import Animal from '../models/animal.model.js';
 import fs from 'fs-extra';
 
 export const getAnimals = async (req, res) => {
-    const animals = await Animal.find();
+    const animals = await Animal.find().populate('owner');
     res.status(200).json(animals);
 }
 
 export const getAnimal = async (req, res) => {
-    const animal = await Animal.findOne({ _id: req.params.id });
+    const animal = await Animal.findOne({ _id: req.params.id }).populate('owner');
     res.status(200).json(animal);
 }
 
@@ -21,6 +21,10 @@ export const createAnimal = async (req, res) => {
         longitude = parsedLocation.longitude;
     }
 
+    if (!req.user) {
+        return res.status(401).json({ message: 'Yetkilendirme gerekli' });
+    }
+
     const newAnimal = new Animal({
         species,
         description,
@@ -29,7 +33,7 @@ export const createAnimal = async (req, res) => {
         healthStatus,
         location: { latitude, longitude },
         image: req.file ? req.file.path : null,
-        // owner: req.user._id,
+        owner: req.user._id,
     });
 
     const animal = await newAnimal.save();
