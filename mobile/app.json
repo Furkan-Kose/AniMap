@@ -1,8 +1,6 @@
 {
   "expo": {
-    "extra": {
-     "googleMapsApiKey": "AIzaSyCvyxoiHtZerF0wNB1zqyCCCUlh646nFQc"
-    },
+  
     "name": "mobile",
     "slug": "mobile",
     "version": "1.0.0",

@@ -2,7 +2,6 @@ import React from "react";
 import { View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-
 const AnimalMap = ({ animals }: any) => {
 
   return (
