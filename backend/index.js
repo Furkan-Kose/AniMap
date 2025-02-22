@@ -6,13 +6,14 @@ import userRoutes from "./routes/user.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
+import { ALL } from "dns";
 
 dotenv.config();
 
 const app = express();
 app.use(cors(
     {
-        origin: "http://localhost:5173",
+        origin: ALL,
         credentials: true,
     }
 ));
