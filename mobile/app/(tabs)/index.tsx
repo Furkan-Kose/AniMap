@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Image } from "react-native";
 import React from "react";
-import { useAnimals } from "../../hooks/useAnimals";
+import { useAnimals, apiURL } from "../../hooks/useAnimals";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AnimalCard from "../../components/AnimalCard";

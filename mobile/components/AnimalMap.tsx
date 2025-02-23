@@ -5,7 +5,7 @@ import MapView, { Marker } from "react-native-maps";
 const AnimalMap = ({ animals }: any) => {
 
   return (
-    <View style={{ height: 400, width: "100%" }}>
+    <View style={{ width: "100%", height: 400 }}>
       <MapView
         provider="google"
         style={{ flex: 1 }}
