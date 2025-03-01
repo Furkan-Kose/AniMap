@@ -30,7 +30,7 @@ const UpdateAnimalPage = () => {
     longitude: animal?.location?.longitude || null,
   });
 
-  const [image, setImage] = useState<string | null>(animal?.image || "");
+  const [image, setImage] = useState<File | null>(animal?.image || "");
   const [tempImage, setTempImage] = useState<string | null>(animal?.image || "");
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
@@ -69,8 +69,8 @@ const UpdateAnimalPage = () => {
     mutation.mutate(formData);
   };
 
-  const handleSave = (image: any, tempImage: any) => {
-    setImage(image);
+  const handleSave = (file: File | null, tempImage: string | null) => {
+    setImage(file);
     setTempImage(tempImage);
     setImageModalOpen(false);
   };
@@ -85,7 +85,7 @@ const UpdateAnimalPage = () => {
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 py-8">
       <h1 className="text-3xl font-bold text-yellow-500 text-center">Hayvan Güncelle</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-8 w-1/2 mx-auto">
         <input
@@ -139,7 +139,7 @@ const UpdateAnimalPage = () => {
           </button>
         </div>
 
-        <img src={`http://localhost:3000/${animal.image}`} alt="" className="w-1/3 mx-auto" />
+        <img src={animal.image} alt="" className="w-1/3 mx-auto" />
 
         {location.latitude && location.longitude && (
           <div className="flex items-center justify-center gap-4">

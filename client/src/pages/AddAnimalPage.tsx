@@ -14,11 +14,11 @@ const AddAnimalPage = () => {
   const queryClient = useQueryClient();
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [tempImage, setTempImage] = useState<string | null>(null);
 
-  const mutation = useMutation({
-    mutationFn: async (newAnimal) => {
+  const mutation = useMutation<FormData, unknown, FormData>({
+    mutationFn: async (newAnimal: FormData) => {
       return axios.post("http://localhost:3000/animals", newAnimal, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -39,21 +39,22 @@ const AddAnimalPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData: any = new FormData(e.target as HTMLFormElement);
-
+    const formData = new FormData(e.target as HTMLFormElement);
+  
     if (location.latitude && location.longitude) {
       formData.append("location", JSON.stringify(location));
     }
-
+  
     if (image) {
       formData.append("image", image);
     }
-
-    mutation.mutate(formData); 
+  
+    mutation.mutate(formData);
   };
+  
 
-  const handleSave = (image: any, tempImage: any) => {
-    setImage(image);
+  const handleSave = (file: File | null, tempImage: string | null) => {
+    setImage(file);
     setTempImage(tempImage);
     setImageModalOpen(false);
   };
@@ -66,7 +67,7 @@ const AddAnimalPage = () => {
   
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 py-8">
       <h1 className="text-3xl font-bold text-yellow-500 text-center">Hayvan Ekle</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 py-8 w-2/3 md:w-1/2 mx-auto">
         <input

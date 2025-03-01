@@ -19,13 +19,16 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      await axios.delete(`${apiURL}/animals/${animal._id}`);
+      await axios.delete(`${apiURL}/animals/${animal._id}`, 
+        { withCredentials: true }
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["animals"] });
       toast.success("Hayvan başarıyla silindi.");
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error("Error deleting animal:", error);
       toast.error("Hayvan silinirken bir hata oluştu.");
     },
   });
@@ -41,7 +44,7 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-102 transition-all duration-300 ease-in-out border border-gray-100">
       <div className="relative" onClick={() =>  navigate(`/animals/${animal._id}`)}>
         <img
-          src={`${apiURL}/${animal.image}`}
+          src={animal.image}
           alt={animal.species}
           className="w-full h-48 object-cover"
         />

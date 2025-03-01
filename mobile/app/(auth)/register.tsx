@@ -4,6 +4,7 @@ import { TextInput, Button, Text, Alert, View } from 'react-native';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 
+
 const Register = () => {
   const { registerFunc } = useAuth();
   const [email, setEmail] = useState('');
@@ -46,7 +47,7 @@ const Register = () => {
           onChangeText={setPassword}
           secureTextEntry
       />
-      <Button title="Kayıt Ol" onPress={() => RegisterMutation.mutate()} />
+      <Button color="#eab308" title="Kayıt Ol" onPress={() => RegisterMutation.mutate()} />
     </View>
   );
 };

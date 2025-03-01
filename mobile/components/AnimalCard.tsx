@@ -19,7 +19,7 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
   return (
     <View className="bg-white rounded-xl shadow-md mb-5 w-[48%] overflow-hidden">
       <Image
-        source={{ uri: `${apiURL}/${animal.image}` }}
+        source={{ uri: animal.image}}
         className="h-48 w-full object-cover rounded-t-xl"
       />
       <View className="p-4">

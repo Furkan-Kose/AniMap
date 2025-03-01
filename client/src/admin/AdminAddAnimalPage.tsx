@@ -9,17 +9,13 @@ import ImageUploadModal from "../components/ImageUploadModal";
 import LocationModal from "../components/LocationModal";
 
 
-
-
 const AdminAddAnimalPage = () => {
-
-
     const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [isImageModalOpen, setImageModalOpen] = useState(false);
     const [isLocationModalOpen, setLocationModalOpen] = useState(false);
-    const [image, setImage] = useState<string | null>(null);
+    const [image, setImage] = useState<File | null>(null);
     const [tempImage, setTempImage] = useState<string | null>(null);
   
     const mutation = useMutation({
@@ -28,6 +24,7 @@ const AdminAddAnimalPage = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true,
         });
       },
       onSuccess: () => {
@@ -56,8 +53,8 @@ const AdminAddAnimalPage = () => {
       mutation.mutate(formData); 
     };
   
-    const handleSave = (image: any, tempImage: any) => {
-      setImage(image);
+    const handleSave = (file: File | null, tempImage: string | null) => {
+      setImage(file);
       setTempImage(tempImage);
       setImageModalOpen(false);
     };
@@ -85,7 +82,7 @@ const AdminAddAnimalPage = () => {
             className="w-1/2 border border-blue-500 p-2 rounded-md"
             onClick={() => setImageModalOpen(true)}
           >
-            Resim Güncelle
+            Resim Ekle
           </button>
 
           <button
@@ -93,7 +90,7 @@ const AdminAddAnimalPage = () => {
             className="w-1/2 border border-blue-500 p-2 rounded-md"
             onClick={() => setLocationModalOpen(true)}
           >
-            Konum Güncelle
+            Konum Ekle
           </button>
         </div>
 

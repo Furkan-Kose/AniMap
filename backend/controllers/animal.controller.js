@@ -1,5 +1,6 @@
 import Animal from '../models/animal.model.js';
-import fs from 'fs-extra';
+import { v2 as cloudinary } from "cloudinary";
+
 
 export const getAnimals = async (req, res) => {
     const animals = await Animal.find().populate('owner');
@@ -25,6 +26,8 @@ export const createAnimal = async (req, res) => {
         return res.status(401).json({ message: 'Yetkilendirme gerekli' });
     }
 
+    const imageUrl = req.file ? req.file.path : null;
+
     const newAnimal = new Animal({
         species,
         description,
@@ -32,14 +35,13 @@ export const createAnimal = async (req, res) => {
         color,
         healthStatus,
         location: { latitude, longitude },
-        image: req.file ? req.file.path : null,
+        image: imageUrl,
         owner: req.user._id,
     });
 
     const animal = await newAnimal.save();
     res.status(201).json(animal);
-}
-
+};
 
 export const updateAnimal = async (req, res) => {
     const { id } = req.params;
@@ -48,8 +50,6 @@ export const updateAnimal = async (req, res) => {
     if (!existingAnimal) {
         return res.status(404).json({ message: 'Hayvan bulunamadı.' });
     }
-
-    const oldImagePath = existingAnimal.image;
 
     let updateData = { ...req.body };
 
@@ -66,15 +66,18 @@ export const updateAnimal = async (req, res) => {
     }
 
     if (req.file) {
-        fs.unlinkSync(oldImagePath);
-        updateData.image = req.file.path;
+        if (existingAnimal.image) {
+            const publicId = "animals/" 
+            + existingAnimal.image.split("/").pop().split(".").slice(0, 2).join("."); 
+            await cloudinary.uploader.destroy(publicId, { invalidate: true, resource_type: "image", type: "upload" });
+        }
+        updateData.image = req.file.path; 
     }
 
     const updatedAnimal = await Animal.findByIdAndUpdate(id, updateData, { new: true });
 
     res.status(200).json(updatedAnimal);
 };
-
 
 export const deleteAnimal = async (req, res) => {
     const animal = await Animal.findByIdAndDelete(req.params.id);
@@ -83,10 +86,15 @@ export const deleteAnimal = async (req, res) => {
         return res.status(404).json({ message: 'Hayvan bulunamadı.' });
     }
 
-    const imagePath = animal.image;
-    await fs.unlink(imagePath);
+    if (animal.image) {
+        const publicId = "animals/" + animal.image.split("/").pop().split(".").slice(0, 2).join("."); 
 
-    await Animal.findByIdAndDelete(req.params.id);
+        try {
+            await cloudinary.uploader.destroy(publicId, { invalidate: true, resource_type: "image", type: "upload" });
+        } catch (error) {
+            return res.status(500).json({ message: 'Resim silinirken bir hata oluştu.' });
+        }
+    }
 
     res.status(204).json(animal);
-}
+};

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const apiURL = "http://192.168.1.201:3000";
+export const apiURL = "http://192.168.1.200:3000";
 
 const fetchAnimals = async () => {
   const res = await axios.get(`${apiURL}/animals`);

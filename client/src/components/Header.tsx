@@ -40,11 +40,11 @@ const Header = () => {
 
   return (
     <header
-      className={`transition-all duration-300 ease-in-out ${
-        isScrolled ? "bg-white shadow-md" : "bg-transparent shadow-sm"
-      } sticky top-0 z-50`}
+      className={`fixed inset-0 transition-all duration-300 ease-in-out top-0 z-40 h-20 flex items-center justify-between w-full px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 ${
+        isScrolled ? "bg-yellow-100/75 backdrop-blur-md" : "bg-transparent"
+      }
+      ${isMenuOpen ? "bg-yellow-100/75 backdrop-blur-md" : ""}`}
     >
-      <div className="max-w-screen-xl mx-auto py-4 md:py-6 px-4 md:px-8 lg:px-16 flex justify-between items-center">
         {/* Logo & Brand */}
         <div className="text-3xl font-semibold tracking-wider uppercase">
           <Link to="/" className="text-gray-800 hover:text-gray-600">
@@ -103,14 +103,11 @@ const Header = () => {
         >
           {isMenuOpen ? "✖" : "☰"}
         </button>
-      </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div
-          className={`transition-all duration-300 ease-in-out ${
-            isScrolled ? "bg-white shadow-lg" : "bg-transparent"
-          } md:hidden text-gray-800 p-4`}
+          className="fixed top-20 left-0 h-fit w-full transition-all duration-300 ease-in-out md:hidden text-gray-800 p-4 bg-yellow-100/75 backdrop-blur-md"
         >
           <nav className="flex flex-col gap-6 text-lg font-medium items-center">
             <Link

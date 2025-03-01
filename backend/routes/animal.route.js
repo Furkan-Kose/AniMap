@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", getAnimals);
 router.get("/:id", getAnimal);
 router.post("/", upload.single("image"), authMiddleware, createAnimal);
-router.put("/:id", upload.single("image"), updateAnimal);
-router.delete("/:id", deleteAnimal);
+router.put("/:id", upload.single("image"), authMiddleware, updateAnimal);
+router.delete("/:id", authMiddleware, deleteAnimal);
 
 export default router;

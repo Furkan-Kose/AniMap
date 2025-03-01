@@ -24,7 +24,7 @@ const Profile = () => {
           <View className="bg-white rounded-lg shadow-md p-5 mb-4">
             <Text className="text-lg font-semibold">Giriş Yapmadınız</Text>
             <Text className="mt-2 mb-4">Profilinizi görüntülemek için lütfen giriş yapın.</Text>
-            <Button title="Giriş Yap" onPress={() => router.push("/login")} color="#0061FF" />
+            <Button title="Giriş Yap" onPress={() => router.push("/login")} color="#eab308" />
           </View>
         )}
       </ScrollView>

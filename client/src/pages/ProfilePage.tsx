@@ -20,7 +20,7 @@ const ProfilePage = () => {
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 py-8">
       <h1 className="text-3xl font-bold text-yellow-500 text-center">Profil</h1>
 
       <div className="max-w-2xl mx-auto py-8">

@@ -20,7 +20,9 @@ const AdminAnimalsPage = () => {
 
     const deleteMutation = useMutation({
         mutationFn: async (animal: AnimalType) => {
-          await axios.delete(`http://localhost:3000/animals/${animal._id}`);
+          await axios.delete(`http://localhost:3000/animals/${animal._id}`, 
+            { withCredentials: true }
+          );
         },
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["animals"] });  
@@ -80,7 +82,7 @@ const AdminAnimalsPage = () => {
         <tbody>
           {animals.map((animal: any) => (
             <tr key={animal._id} className="border-b hover:bg-gray-100">
-              <td className="py-3 px-6"><img src={`${apiURL}/${animal.image}`} alt={animal.species} className="w-16 h-16 object-cover" /></td>
+              <td className="py-3 px-6"><img src={animal.image} alt={animal.species} className="w-16 h-16 object-cover" /></td>
               <td className="py-3 px-6">{animal.species}</td>
               <td className="py-3 px-6">{animal.gender}</td>
               <td className="py-3 px-6">{animal.color}</td>

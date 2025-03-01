@@ -39,7 +39,7 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 py-8">
       <h1 className="text-3xl font-bold text-yellow-500 text-center">Kayıt Ol</h1>
       <form onSubmit={handleRegister} className="flex flex-col gap-4 py-8 w-2/3 md:w-1/2 mx-auto">
         <input

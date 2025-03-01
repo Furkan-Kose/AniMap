@@ -39,7 +39,7 @@ const Login = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Giriş Yap" onPress={() => loginMutation.mutate()} />
+      <Button color="#eab308" title="Giriş Yap" onPress={() => loginMutation.mutate()} />
     </View>
   );
 };

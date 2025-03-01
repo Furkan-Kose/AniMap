@@ -12,11 +12,11 @@ const AuthLayout = () => {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#0061FF" />
+      <StatusBar style="light" backgroundColor="#eab308" />
       <Tabs
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#0061FF",
+            backgroundColor: "#eab308",
           },
           headerTitleStyle: {
             fontSize: 20,
@@ -63,6 +63,7 @@ const AuthLayout = () => {
           tabBarIconStyle: {
             marginBottom: -5,
           },
+          tabBarActiveTintColor: "#eab308",
         }}
       >
         <Tabs.Screen

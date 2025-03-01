@@ -5,7 +5,6 @@ import animalRoutes from "./routes/animal.route.js";
 import userRoutes from "./routes/user.route.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import path from "path";
 import { ALL } from "dns";
 
 dotenv.config();
@@ -20,8 +19,6 @@ app.use(cors(
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.use("/uploads", express.static(path.join(path.resolve(), "/uploads")));
 
 app.use("/animals", animalRoutes);
 app.use("/users", userRoutes);

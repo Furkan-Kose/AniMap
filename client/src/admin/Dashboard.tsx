@@ -62,36 +62,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Son Aktiviteler */}
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-800">Son Aktiviteler</h2>
-        <div className="bg-white shadow-lg p-6 rounded-lg mt-4">
-          <ul className="space-y-4">
-            <li className="flex justify-between text-gray-700">
-              <span>Hayvan ekledi: Kedi (Sokak Kedi)</span>
-              <span className="text-gray-500 text-sm">10 dakika önce</span>
-            </li>
-            <li className="flex justify-between text-gray-700">
-              <span>Kullanıcı kaydoldu: Ahmet Yılmaz</span>
-              <span className="text-gray-500 text-sm">1 saat önce</span>
-            </li>
-            <li className="flex justify-between text-gray-700">
-              <span>Hayvan güncellendi: Köpek (Evcil)</span>
-              <span className="text-gray-500 text-sm">2 saat önce</span>
-            </li>
-            <li className="flex justify-between text-gray-700">
-              <span>Kullanıcı çıkışı yaptı: Zeynep Duru</span>
-              <span className="text-gray-500 text-sm">3 saat önce</span>
-            </li>
-          </ul>
-        </div>
-      </div>
 
-      {/* İstatistiksel Grafikler */}
-      <div>
-        <h2 className="text-2xl font-semibold text-gray-800">İstatistikler</h2>
-        
-      </div>
     </div>
   );
 };

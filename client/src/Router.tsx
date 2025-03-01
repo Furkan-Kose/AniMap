@@ -16,6 +16,7 @@ import AnimalsPage from "./pages/AnimalsPage";
 import AdminAddUserPage from "./admin/AdminAddUserPage";
 import AdminUpdateUserPage from "./admin/AdminUpdateUserPage";
 import AnimalDetailsPage from "./pages/AnimalDetailsPage";
+import Settings from "./admin/Settings";
 
 
 export const router = createBrowserRouter([
@@ -86,6 +87,10 @@ export const router = createBrowserRouter([
         {
           path: "/admin/users/update/:id",
           element: <AdminUpdateUserPage />
+        },
+        {
+          path: "/admin/settings",
+          element: <Settings />
         }
       ]
     }

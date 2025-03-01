@@ -30,7 +30,7 @@ const AnimalsPage = () => {
   });
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 py-8">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 py-8">
       <h1 className="text-3xl font-bold text-center text-yellow-500">Hayvanlar</h1>
 
       <div className="flex flex-wrap justify-center gap-4 my-6">

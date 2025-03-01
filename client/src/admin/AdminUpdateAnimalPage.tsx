@@ -34,7 +34,7 @@ const AdminUpdateAnimalPage = () => {
     longitude: animal?.location?.longitude || null,
   });
 
-  const [image, setImage] = useState<string | null>(animal?.image || "");
+  const [image, setImage] = useState<File | null>(animal?.image || "");
   const [tempImage, setTempImage] = useState<string | null>(animal?.image || "");
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
@@ -45,6 +45,7 @@ const AdminUpdateAnimalPage = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       });
     },
     onSuccess: () => {
@@ -73,8 +74,8 @@ const AdminUpdateAnimalPage = () => {
     mutation.mutate(formData);
   };
 
-  const handleSave = (image: any, tempImage: any) => {
-    setImage(image);
+  const handleSave = (file: File | null, tempImage: string | null) => {
+    setImage(file);
     setTempImage(tempImage);
     setImageModalOpen(false);
   };
@@ -117,7 +118,7 @@ const AdminUpdateAnimalPage = () => {
           </button>
         </div>
 
-        <img src={`http://localhost:3000/${animal.image}`} alt="" className="w-1/3 mx-auto" />
+        <img src={animal.image} alt="" className="w-1/3 mx-auto" />
 
         {location.latitude && location.longitude && (
           <div className="flex items-center justify-center gap-4">

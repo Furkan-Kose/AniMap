@@ -19,7 +19,9 @@ const AdminUsersPage = () => {
 
   const deleteMutation = useMutation({
       mutationFn: async (user: any) => {
-        await axios.delete(`http://localhost:3000/users/${user._id}`);
+        await axios.delete(`http://localhost:3000/users/${user._id}`, 
+          { withCredentials: true }
+        );
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["users"] });  

@@ -17,7 +17,7 @@ const Index = () => {
     <SafeAreaView edges={["left", "right", "bottom"]} className="bg-gray-100 h-full">
       <ScrollView contentContainerClassName="pb-24 pt-5 px-4"> 
         {/* ✅ GİRİŞ BÖLÜMÜ */}
-        <View className="bg-blue-600 p-6 rounded-xl shadow-lg mb-6">
+        <View className="bg-yellow-500 p-6 rounded-xl shadow-lg mb-6">
           <Text className="text-white text-3xl font-bold text-center">
             Sokak Hayvanlarına Destek Ol!
           </Text>
@@ -30,7 +30,7 @@ const Index = () => {
             className="mt-4 bg-white py-3 px-6 rounded-full shadow-lg mx-auto"
             onPress={() => router.push("/add-animal")}
           >
-            <Text className="text-blue-600 font-bold text-lg">Hayvan Ekle</Text>
+            <Text className="text-yellow-500 font-bold text-lg">Hayvan Ekle</Text>
           </TouchableOpacity>
         </View>
 
