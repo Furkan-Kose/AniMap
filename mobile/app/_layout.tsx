@@ -12,6 +12,23 @@ export default function RootLayout() {
         <Stack >
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(profile)/update-profile"
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: '#eab308',
+              },
+              headerTitleStyle: {
+                color: 'white',
+                fontWeight: 'bold', 
+                fontSize: 20,
+              },
+              headerTintColor: 'white',
+              headerTitleAlign: 'left',
+              headerTitle: 'Profil Güncelle',
+            }}
+          />
         </Stack>
       </AuthProvider>
     </QueryClientProvider>

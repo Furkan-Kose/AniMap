@@ -19,8 +19,6 @@ export const colorOptions = [
     { value: "Kahverengi", label: "Kahverengi" },
     { value: "Sarı", label: "Sarı" },
     { value: "Turuncu", label: "Turuncu" },
-    { value: "Tekir", label: "Çizgili (Tekir)" },
-    { value: "Alacalı", label: "Benekli (Alacalı)" },
 ];
 
 export const roleOptions = [
