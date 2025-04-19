@@ -17,6 +17,13 @@ import AdminAddUserPage from "./admin/AdminAddUserPage";
 import AdminUpdateUserPage from "./admin/AdminUpdateUserPage";
 import AnimalDetailsPage from "./pages/AnimalDetailsPage";
 import Settings from "./admin/Settings";
+import CampaignsPage from "./pages/CampaignsPage";
+import AddCampaignPage from "./pages/AddCampaignPage";
+import CampaignDetailPage from "./pages/CampaignDetailPage";
+import UpdateCampaignPage from "./pages/UpdateCampaignPage";
+import AdminCampaignsPage from "./admin/AdminCampaignsPage";
+import AdminAddCampaignPage from "./admin/AdminAddCampaignPage";
+import AdminUpdateCampaignPage from "./admin/AdminUpdateCampaignPage";
 
 
 export const router = createBrowserRouter([
@@ -54,6 +61,22 @@ export const router = createBrowserRouter([
         {
           path: "/profile",
           element: <ProfilePage />
+        },
+        {
+          path: "/campaigns",
+          element: <CampaignsPage />
+        },
+        {
+          path: "/campaigns/add",
+          element: <AddCampaignPage />
+        },
+        {
+          path: "/campaigns/:id",
+          element: <CampaignDetailPage />
+        },
+        {
+          path: "/campaigns/update/:id",
+          element: <UpdateCampaignPage />
         }
       ]
     },
@@ -91,6 +114,18 @@ export const router = createBrowserRouter([
         {
           path: "/admin/settings",
           element: <Settings />
+        },
+        {
+          path: "/admin/campaigns",
+          element: <AdminCampaignsPage />
+        },
+        {
+          path: "/admin/campaigns/add",
+          element: <AdminAddCampaignPage />
+        },
+        {
+          path: "/admin/campaigns/update/:id",
+          element: <AdminUpdateCampaignPage />
         }
       ]
     }

@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../context/AuthContext";
 
@@ -79,14 +79,46 @@ const TabsLayout = () => {
             tabBarLabel: "Animals",
           }}
         />
+
         <Tabs.Screen
           name="add-animal"
           options={{
-            title: "Add Animal",
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="plus-circle" size={size} color={color} />
+            headerTitle: "Add Animal",
+            tabBarLabel: "",
+            tabBarIcon: ({ color, size, focused }) => (
+              <View
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 28,
+                  backgroundColor: "#fff",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginBottom: 28,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 6,
+                  elevation: 8,
+                  borderWidth: 2,
+                  borderColor: color,
+                }}
+              >
+                <FontAwesome name="plus" size={size} color={color} />
+              </View>
             ),
-            tabBarLabel: "Add Animal",
+          }}
+        />
+
+
+        <Tabs.Screen
+          name="campaigns"
+          options={{
+            title: "Campaigns",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="bullhorn" size={size} color={color} />
+            ),
+            tabBarLabel: "Campaigns",
           }}
         />
         <Tabs.Screen

@@ -3,6 +3,7 @@ import connectDB from "./lib/connectDB.js";
 import express from "express";
 import animalRoutes from "./routes/animal.route.js";
 import userRoutes from "./routes/user.route.js";
+import campaignRoutes from "./routes/campaign.route.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ALL } from "dns";
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use("/animals", animalRoutes);
 app.use("/users", userRoutes);
+app.use("/campaigns", campaignRoutes);
 
 app.use((error, req, res, next) => {
     res.status(error.status || 500);    

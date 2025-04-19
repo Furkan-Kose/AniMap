@@ -63,6 +63,9 @@ const Header = () => {
           <Link to="/add" className="text-gray-800 hover:text-gray-600">
             Hayvan Ekle
           </Link>
+          <Link to="/campaigns" className="text-gray-800 hover:text-gray-600">
+            Kampanyalar
+          </Link>
           {user ? (
             <>
               <Link

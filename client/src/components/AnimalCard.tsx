@@ -7,7 +7,6 @@ import { AnimalType } from "../types";
 import { apiURL } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
 
-
 interface AnimalCardProps {
   animal: AnimalType;
 }
@@ -19,9 +18,7 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      await axios.delete(`${apiURL}/animals/${animal._id}`, 
-        { withCredentials: true }
-      );
+      await axios.delete(`${apiURL}/animals/${animal._id}`, { withCredentials: true });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["animals"] });
@@ -41,72 +38,69 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
   const isOwner = user?._id === String(animal.owner._id);
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform hover:scale-102 transition-all duration-300 ease-in-out border border-gray-100">
-      <div className="relative" onClick={() =>  navigate(`/animals/${animal._id}`)}>
-        <img
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden transition hover:scale-[1.015] hover:shadow-2xl duration-300 border border-gray-200">
+      <div 
+        className="relative cursor-pointer group"
+        onClick={() => navigate(`/animals/${animal._id}`)}
+      >
+        <img 
           src={animal.image}
           alt={animal.species}
-          className="w-full h-48 object-cover"
+          className="w-full h-52 object-cover group-hover:brightness-90 transition"
         />
-        <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full">
-          <p className="text-sm font-medium text-gray-700">{formattedDate}</p>
+        <div className="absolute top-3 left-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-full shadow">
+          {formattedDate}
         </div>
       </div>
 
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-gray-800 tracking-tight">
-            {animal.species}
-          </h2>
-          <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium">
+      <div className="p-5 space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-gray-800">{animal.species}</h2>
+          <span className={`px-3 py-1 rounded-full text-xs font-medium
+            ${animal.healthStatus === "Sağlıklı" 
+              ? "bg-green-100 text-green-600"
+              : "bg-yellow-100 text-yellow-600"
+            }`}>
             {animal.healthStatus}
           </span>
         </div>
 
-        <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-          {animal.description}
-        </p>
+        <p className="text-gray-600 text-sm line-clamp-3">{animal.description}</p>
 
-        <div className="grid grid-cols-2 gap-3 mb-6">
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <span className="text-xs text-gray-500 block">Cinsiyet</span>
-            <span className="text-sm font-medium text-gray-800">
-              {animal.gender}
-            </span>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col bg-gray-50 p-2 rounded">
+            <span className="text-xs text-gray-500">Cinsiyet</span>
+            <span className="text-sm font-medium text-gray-800">{animal.gender}</span>
           </div>
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <span className="text-xs text-gray-500 block">Renk</span>
-            <span className="text-sm font-medium text-gray-800">
-              {animal.color}
-            </span>
+          <div className="flex flex-col bg-gray-50 p-2 rounded">
+            <span className="text-xs text-gray-500">Renk</span>
+            <span className="text-sm font-medium text-gray-800">{animal.color}</span>
           </div>
         </div>
 
-        <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-medium text-sm">
+        <div className="flex items-center justify-between border-t pt-3 border-gray-200">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+              <span className="text-blue-600 font-semibold">
                 {animal.owner.username?.charAt(0).toUpperCase() || "?"}
               </span>
             </div>
-            <span className="ml-3 text-sm text-gray-600">
-              {animal.owner.username || "Anonim"}
-            </span>
+            <span className="text-sm text-gray-600">{animal.owner.username || "Anonim"}</span>
           </div>
 
           {isOwner && (
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <Link
                 to={`/update/${animal._id}`}
-                className="text-blue-600 hover:text-blue-800 transition duration-200"
+                className="text-blue-600 hover:text-blue-800"
               >
-                <FaEdit size={20} />
+                <FaEdit size={18} />
               </Link>
               <button
                 onClick={handleDelete}
-                className="text-red-600 hover:text-red-800 transition duration-200"
+                className="text-red-600 hover:text-red-800"
               >
-                <FaTrash size={20} />
+                <FaTrash size={18} />
               </button>
             </div>
           )}

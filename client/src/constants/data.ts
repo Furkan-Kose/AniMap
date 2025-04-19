@@ -24,6 +24,7 @@ export const colorOptions = [
 export const roleOptions = [
     { value: "user", label: "Kullanıcı" },
     { value: "admin", label: "Admin" },
+    { value: "stk", label: "STK" },
 ]
 
 

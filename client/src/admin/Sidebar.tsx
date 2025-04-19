@@ -1,15 +1,15 @@
 "use client";
 
-import { FaHome, FaUser, FaCog, FaSignOutAlt, FaDog, FaArrowLeft } from "react-icons/fa";
+import { FaHome, FaUser, FaCog, FaSignOutAlt, FaDog, FaArrowLeft, FaBullhorn } from "react-icons/fa";
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }: any) => {
   const menuItems = [
     { label: "Anasayfa", icon: <FaHome />, href: "/admin" },
     { label: "Kullanıcılar", icon: <FaUser />, href: "/admin/users" },
     { label: "Hayvanlar", icon: <FaDog />, href: "/admin/animals" },
+    { label: "Kampanyalar", icon: <FaBullhorn />, href: "/admin/campaigns" },
     { label: "Ayarlar", icon: <FaCog />, href: "/admin/settings" },
     { label: "Siteye Dön", icon: <FaArrowLeft />, href: "/" },
-    // { label: "Çıkış Yap", icon: <FaSignOutAlt />, href: "/logout" },
   ];
 
   return (

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { FaUser, FaDog, FaChartLine, FaCog } from 'react-icons/fa';
-import { fetchAnimals, fetchUsers } from '../lib/api';
+import { FaUser, FaDog, FaCog, FaBullhorn } from 'react-icons/fa';
+import { fetchAnimals, fetchUsers, fetchCampaigns } from '../lib/api'; 
 import Loading from '../components/Loading';
 
-const Dashboard = () => {
 
+const Dashboard = () => {
   const { isPending, error, data: animals } = useQuery({
     queryKey: ["animals"],
     queryFn: () => fetchAnimals(),
@@ -15,6 +15,11 @@ const Dashboard = () => {
     queryFn: () => fetchUsers(),
   });
 
+  const { isPending: isPendingCampaign, error: errorCampaign, data: campaigns } = useQuery({
+    queryKey: ["campaigns"],
+    queryFn: () => fetchCampaigns(),
+  });
+
   if (isPending) return <Loading />;
 
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
@@ -22,6 +27,11 @@ const Dashboard = () => {
   if (isPendingUser) return <Loading />;
 
   if (errorUser) return <p className="text-center text-red-500">Error: {errorUser.message}</p>;
+
+  if (isPendingCampaign) return <Loading />;
+
+  if (errorCampaign) return <p className="text-center text-red-500">Error: {errorCampaign.message}</p>;
+
 
   return (
     <div className="p-8 space-y-8">
@@ -48,10 +58,10 @@ const Dashboard = () => {
 
         <div className="bg-white shadow-lg p-6 rounded-lg flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-700">Son Eklenenler</h2>
-            <p className="text-2xl text-gray-900">30</p>
+            <h2 className="text-xl font-semibold text-gray-700">Toplam Kampanya</h2>
+            <p className="text-2xl text-gray-900">{campaigns.length}</p>
           </div>
-          <FaChartLine className="text-4xl text-yellow-500" />
+          <FaBullhorn className="text-4xl text-yellow-500" />
         </div>
 
         <div className="bg-white shadow-lg p-6 rounded-lg flex items-center justify-between">
@@ -61,7 +71,6 @@ const Dashboard = () => {
           <FaCog className="text-4xl text-gray-500" />
         </div>
       </div>
-
 
     </div>
   );

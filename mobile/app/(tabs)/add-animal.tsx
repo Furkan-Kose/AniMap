@@ -8,8 +8,10 @@ import { Picker } from "@react-native-picker/picker";
 import ImageUploadModal from "../../components/ImageUploadModal";
 import LocationModal from "../../components/LocationModal";
 import { genderOptions, colorOptions, healthStatusOptions } from "../../constants/data";
+import { useAuth } from "@/context/AuthContext";
 
 const AddAnimal = () => {
+  const { user } = useAuth();
   const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -26,7 +28,7 @@ const AddAnimal = () => {
 
   const mutation = useMutation<FormData, unknown, FormData>({
     mutationFn: async (newAnimal: FormData) => {
-      return axios.post("http://192.168.1.117:3000/animals", newAnimal, {
+      return axios.post("http://192.168.1.123:3000/animals", newAnimal, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -84,6 +86,24 @@ const AddAnimal = () => {
     setLocation({ latitude, longitude });
     setLocationModalOpen(false); 
   };
+
+  if (!user) {
+    return (
+      <SafeAreaView className="flex-1 bg-gray-100 px-4 pt-6">
+        <View className="bg-white rounded-xl shadow-lg p-8 mb-6 items-center">
+          <Text className="text-lg font-semibold text-gray-600 text-center">
+            Hayvan eklemek için giriş yapmalısınız.
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/login")}
+            className="bg-yellow-500 py-2 px-6 rounded-full w-full flex items-center justify-center mt-4"
+          >
+            <Text className="text-white text-lg font-bold">Giriş Yap</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView edges={["left", "right", "bottom"]} className="bg-gray-100 h-full">
