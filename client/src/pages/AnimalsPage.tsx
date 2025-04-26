@@ -1,20 +1,16 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import AnimalCard from "../components/AnimalCard";
 import Loading from "../components/Loading";
-import { fetchAnimals } from "../lib/api";
+import { useAnimals } from "../hooks/useAnimals";
 
 const AnimalsPage = () => {
-  const { isPending, error, data: animals } = useQuery({
-    queryKey: ["animals"],
-    queryFn: fetchAnimals,
-  });
+  const { animals, isLoading, error } = useAnimals();
 
   const [selectedSpecies, setSelectedSpecies] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedHealthStatus, setSelectedHealthStatus] = useState("");
 
-  if (isPending) return <Loading />;
+  if (isLoading) return <div className="flex items-center justify-center min-h-screen"><Loading /></div>;
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   const speciesOptions = [...new Set(animals.map((animal: any) => animal.species))];
@@ -81,7 +77,7 @@ const AnimalsPage = () => {
         {filteredAnimals.length > 0 ? (
           filteredAnimals.map((animal: any) => <AnimalCard key={animal._id} animal={animal} />)
         ) : (
-          <p className="text-center text-gray-500 col-span-full">Eşleşen hayvan bulunamadı.</p>
+          <p className="text-center text-gray-500 col-span-full mt-5">Eşleşen hayvan bulunamadı.</p>
         )}
       </div>
     </div>

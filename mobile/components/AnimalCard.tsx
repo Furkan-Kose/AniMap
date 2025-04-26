@@ -4,7 +4,8 @@ import { Feather } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { apiURL } from "../hooks/useAnimals";
+import { apiURL, useAnimals } from "../hooks/useAnimals";
+import { router } from "expo-router";
 
 interface AnimalCardProps {
   animal: {
@@ -28,29 +29,15 @@ const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
   const { user } = useAuth();
   const isOwner = user?._id === String(animal.owner._id);
   const queryClient = useQueryClient();
-
-  const deleteMutation = useMutation({
-    mutationFn: async () => {
-      await axios.delete(`${apiURL}/animals/${animal._id}`, 
-        { withCredentials: true }
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["animals"] });
-      Alert.alert("Hayvan başarıyla silindi.");
-    },
-    onError: (error: any) => {
-      console.error("Error deleting animal:", error);
-      Alert.alert("Hayvan silinirken bir hata oluştu.");
-    },
-  });
+  const { deleteAnimal } = useAnimals();
+  
 
   const handleDelete = () => {
-    deleteMutation.mutate();
+    deleteAnimal.mutate(animal._id);
   };
 
   const handleUpdate = () => {
-
+    router.push({ pathname: "/update-animal/[id]", params: { id: animal._id } });
   };
 
   return (

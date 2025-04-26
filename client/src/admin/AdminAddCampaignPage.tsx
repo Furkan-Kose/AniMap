@@ -1,9 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useCampaigns } from "../hooks/useCampaigns";
 
 const AdminAddCampaignPage = () => {
   const { user } = useAuth();
@@ -14,24 +13,8 @@ const AdminAddCampaignPage = () => {
   const [endDate, setEndDate] = useState("");
   const [tags, setTags] = useState("");
 
+  const { addCampaign } = useCampaigns();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async (campaignData: any) => {
-      return axios.post("http://localhost:3000/campaigns", campaignData, {
-        withCredentials: true,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
-      toast.success("Kampanya başarıyla eklendi.");
-      navigate("/admin/campaigns");
-    },
-    onError: () => {
-      toast.error("Kampanya eklenirken bir hata oluştu.");
-    },
-  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,7 +23,7 @@ const AdminAddCampaignPage = () => {
       return;
     }
 
-    const campaignData = {
+    const campaignData: any = {
       title,
       description,
       image,
@@ -50,7 +33,11 @@ const AdminAddCampaignPage = () => {
       organization: user?._id,
     };
 
-    mutation.mutate(campaignData);
+    addCampaign.mutate(campaignData, {
+      onSuccess: () => {
+        navigate("/admin/campaigns");
+      },
+    });
   };
 
   return (
@@ -110,7 +97,7 @@ const AdminAddCampaignPage = () => {
           className="border p-2 rounded-md"
         />
         <button
-          disabled={mutation.isPending}
+          disabled={addCampaign.isPending}
           type="submit"
           className="bg-blue-500 text-white p-2 rounded-md"
         >

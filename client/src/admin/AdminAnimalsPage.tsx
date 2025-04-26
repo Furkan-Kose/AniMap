@@ -1,43 +1,26 @@
 import { FaPencilAlt, FaTrashAlt, FaSearch } from "react-icons/fa";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../components/Loading";
-import { apiURL, fetchAnimals } from "../lib/api";
 import { useNavigate } from "react-router";
-import { AnimalType } from "../types";
-import { toast } from "react-toastify";
+import { useAnimals } from "../hooks/useAnimals";
+import { useState } from "react";
 
 
 const AdminAnimalsPage = () => {
     const navigate = useNavigate();
 
-    const { isPending, error, data: animals } = useQuery({
-        queryKey: ["animals"],
-        queryFn: () => fetchAnimals(),
-    });
+    const { animals, isLoading, error, deleteAnimal } = useAnimals();
+    
+    const [searchTerm, setSearchTerm] = useState("");
 
-    const queryClient = useQueryClient();
+    const filteredAnimals = animals?.filter((animal: any) =>
+      animal.species.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-    const deleteMutation = useMutation({
-        mutationFn: async (animal: AnimalType) => {
-          await axios.delete(`http://localhost:3000/animals/${animal._id}`, 
-            { withCredentials: true }
-          );
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["animals"] });  
-          toast.success("Hayvan başaroyla silindi.");
-        },
-        onError: () => {
-          toast.error("Hayvan silinirken bir hata oluştu.");
-        },
-    });
-
-    const handleDelete = (animal: AnimalType) => {
-        deleteMutation.mutate(animal);
+    const handleDelete = (id: string) => {
+        deleteAnimal.mutate(id);
     };
 
-    if (isPending) return <Loading />;
+    if (isLoading) return <Loading />;
 
     if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
@@ -52,7 +35,10 @@ const AdminAnimalsPage = () => {
             type="text"
             placeholder="Hayvan ara..."
             className="p-2 border border-gray-300 rounded-l-lg w-80"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
+
           <button className="bg-blue-500 text-white p-2 rounded-r-lg">
             <FaSearch />
           </button>
@@ -80,7 +66,7 @@ const AdminAnimalsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {animals.map((animal: any) => (
+          {filteredAnimals.map((animal: any) => (
             <tr key={animal._id} className="border-b hover:bg-gray-100">
               <td className="py-3 px-6"><img src={animal.image} alt={animal.species} className="w-16 h-16 object-cover" /></td>
               <td className="py-3 px-6">{animal.species}</td>
@@ -91,7 +77,7 @@ const AdminAnimalsPage = () => {
                 <button className="text-blue-500 mr-4" onClick={() => navigate(`/admin/animals/update/${animal._id}`)}>
                   <FaPencilAlt />
                 </button>
-                <button className="text-red-500" onClick={() => handleDelete(animal)}>
+                <button className="text-red-500" onClick={() => handleDelete(animal._id)}>
                   <FaTrashAlt />
                 </button>
               </td>

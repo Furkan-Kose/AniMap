@@ -1,33 +1,18 @@
 import Loading from "../components/Loading";
 import Select from "react-select";
 import { colorOptions, genderOptions, healthStatusOptions } from "../constants/data";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { toast } from "react-toastify";
 import ImageUploadModal from "../components/ImageUploadModal";
 import LocationModal from "../components/LocationModal";
+import { useAnimals } from "../hooks/useAnimals";
 
-
-
-const fetchAnimal = async (id: string) => {
-  const res = await axios.get(`http://localhost:3000/animals/${id}`);
-  return res.data;
-};
 
 const AdminUpdateAnimalPage = () => {
-
-
-    const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const { data: animal, isPending, error } = useQuery({
-    queryKey: ["animal", id],
-    queryFn: () => fetchAnimal(id!),
-  });
-
-  const queryClient = useQueryClient();
+  const { animal, isAnimalLoading, animalError, updateAnimal } = useAnimals(id);
 
   const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({
     latitude: animal?.location?.latitude || null,
@@ -38,26 +23,6 @@ const AdminUpdateAnimalPage = () => {
   const [tempImage, setTempImage] = useState<string | null>(animal?.image || "");
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
-
-  const mutation = useMutation({
-    mutationFn: async (updatedAnimal: any) => {
-      return axios.put(`http://localhost:3000/animals/${id}`, updatedAnimal, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["animals"] });
-      queryClient.invalidateQueries({ queryKey: ["animal", id] });
-      toast.success("Hayvan başarıyla güncellendi.");
-      navigate("/admin/animals");
-    },
-    onError: () => {
-      toast.error("Hayvan güncellenirken bir hata oluştu.");
-    },
-  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -71,7 +36,11 @@ const AdminUpdateAnimalPage = () => {
       formData.append("image", image);
     }
 
-    mutation.mutate(formData);
+    updateAnimal.mutate({ id: animal._id, data: formData }, {
+      onSuccess: () => {
+        navigate("/admin/animals");
+      },
+    });
   };
 
   const handleSave = (file: File | null, tempImage: string | null) => {
@@ -86,8 +55,8 @@ const AdminUpdateAnimalPage = () => {
     setLocationModalOpen(false);
   };
 
-  if (isPending) return <Loading />;
-  if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
+  if (isAnimalLoading) return <Loading />;
+  if (animalError) return <p className="text-center text-red-500">Error: {animalError.message}</p>;
 
 
   return (
@@ -128,7 +97,7 @@ const AdminUpdateAnimalPage = () => {
           </div>
         )}
 
-        <button disabled={mutation.isPending} type="submit" className="bg-blue-500 text-white p-2 rounded-md">Güncelle</button>
+        <button disabled={updateAnimal.isPending} type="submit" className="bg-blue-500 text-white p-2 rounded-md">Güncelle</button>
       </form>
 
         <div>

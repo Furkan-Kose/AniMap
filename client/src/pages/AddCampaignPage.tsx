@@ -1,31 +1,12 @@
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { useNavigate } from "react-router";
+import React from "react";
 import { useAuth } from "../context/AuthContext";
-import { toast } from "react-toastify";
+import { useCampaigns } from "../hooks/useCampaigns";
+import { useNavigate } from "react-router";
 
 const AddCampaignPage = () => {
   const { user } = useAuth();
+  const { addCampaign } = useCampaigns();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async (data) => {
-      return axios.post("http://localhost:3000/campaigns", data, {
-        withCredentials: true,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
-      toast.success("Kampanya başarıyla eklendi.")
-      navigate("/campaigns");
-    },
-    onError: (err) => {
-      console.error("Kampanya ekleme hatası:", err);
-      toast.error("Kampanya eklenirken bir hata oluştu.");
-    },
-  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +23,11 @@ const AddCampaignPage = () => {
     data.tags = data.tags?.split(",").map((tag: string) => tag.trim());
     data.organization = user?._id;
   
-    mutation.mutate(data);
+    addCampaign.mutate(data, {
+      onSuccess: () => {
+        navigate("/campaigns");
+      }
+    });
   };
   
 
@@ -93,10 +78,10 @@ const AddCampaignPage = () => {
 
         <button
           type="submit"
-          disabled={mutation.isPending}
+          disabled={addCampaign.isPending}
           className="bg-yellow-500 text-white p-2 rounded-md mt-2"
         >
-          {mutation.isPending ? "Ekleniyor..." : "Kampanya Ekle"}
+          {addCampaign.isPending ? "Ekleniyor..." : "Kampanya Ekle"}
         </button>
       </form>
     </div>

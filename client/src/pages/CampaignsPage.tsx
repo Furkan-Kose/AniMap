@@ -1,42 +1,18 @@
 import { Link } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiURL, fetchCampaigns } from "../lib/api";
 import Loading from "../components/Loading";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { useCampaigns } from "../hooks/useCampaigns";
 
 const CampaignsPage = () => {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
-
-  const { isPending, error, data: campaigns } = useQuery({
-    queryKey: ["campaigns"],
-    queryFn: fetchCampaigns,
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await axios.delete(`${apiURL}/campaigns/${id}`,
-        {withCredentials: true}
-      )
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
-      toast.success("Kampanya başarıyla silindi.")
-    },
-    onError: (error: any) => {
-      console.error("Error deleting campaign:", error);
-      toast.error("Kampanya silinirken bir hata oluştu.");
-    },
-  });
+  const { campaigns, deleteCampaign, isLoading, error } = useCampaigns();
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id);
+    deleteCampaign.mutate(id);
   };
 
-  if (isPending) return <Loading />;
+  if (isLoading) return <div className="flex items-center justify-center min-h-screen"><Loading /></div>;
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   return (

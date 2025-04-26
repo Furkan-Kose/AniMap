@@ -1,82 +1,60 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
+import { useCampaigns } from "../hooks/useCampaigns";
 
 const AdminUpdateCampaignPage = () => {
   const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { campaign, isLoading, error, updateCampaign } = useCampaigns(id);
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [goalAmount, setGoalAmount] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [tags, setTags] = useState("");
-
-  const { data: campaign, isLoading } = useQuery({
-    queryKey: ["campaign", id],
-    queryFn: async () => {
-      const res = await axios.get(`http://localhost:3000/campaigns/${id}`);
-      return res.data;
-    },
-    enabled: !!id,
+  const [formData, setFormData] = useState<any>({
+      title: "",
+      description: "",
+      image: "",
+      goalAmount: "",
+      endDate: "",
+      tags: "",
   });
 
   useEffect(() => {
-    if (campaign) {
-      setTitle(campaign.title);
-      setDescription(campaign.description);
-      setImage(campaign.image);
-      setGoalAmount(String(campaign.goalAmount));
-      setEndDate(campaign.endDate);
-      setTags(campaign.tags);
-    }
+      if (campaign) {
+        setFormData({
+          ...campaign,
+          tags: campaign.tags?.join(", ") || "",
+        });
+      }
   }, [campaign]);
 
-  const mutation = useMutation({
-    mutationFn: async (updatedCampaign: any) => {
-      return axios.put(`http://localhost:3000/campaigns/${id}`, updatedCampaign, {
-        withCredentials: true,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
-      toast.success("Kampanya başarıyla güncellendi.");
-      navigate("/admin/campaigns");
-    },
-    onError: () => {
-      toast.error("Kampanya güncellenirken bir hata oluştu.");
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!title || !description || !image || !goalAmount || !endDate || !tags) {
-      toast.error("Tüm alanlar doldurulmalı!");
-      return;
-    }
-
-    const updatedCampaign = {
-      title,
-      description,
-      image,
-      goalAmount: Number(goalAmount),
-      endDate,
-      tags,
-      organization: user?._id,
-    };
-
-    mutation.mutate(updatedCampaign);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      const data = {
+        ...formData,
+        goalAmount: parseFloat(formData.goalAmount),
+        tags: formData.tags?.split(",").map((tag: string) => tag.trim()),
+        organization: user?._id,
+      };
+  
+      updateCampaign.mutate(data, {
+        onSuccess: () => {
+          navigate("/admin/campaigns");
+        },
+      });
+    };
+
   if (isLoading) return <Loading />;
+  if (error) return <p className="text-center pt-28 text-red-500">Kampanya getirilemedi.</p>;
 
   return (
     <div className="p-8 space-y-8">
@@ -85,8 +63,8 @@ const AdminUpdateCampaignPage = () => {
         <input
           name="title"
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={formData.title}
+          onChange={handleChange}
           required
           placeholder="Kampanya Başlığı"
           className="border p-2 rounded-md"
@@ -94,16 +72,16 @@ const AdminUpdateCampaignPage = () => {
         <input
           name="image"
           type="text"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          value={formData.image}
+          onChange={handleChange}
           required
           placeholder="Görsel URL"
           className="border p-2 rounded-md"
         />
         <textarea
           name="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={formData.description}
+          onChange={handleChange}
           required
           placeholder="Kampanya Açıklaması"
           className="border p-2 rounded-md h-40 resize-none"
@@ -111,8 +89,8 @@ const AdminUpdateCampaignPage = () => {
         <input
           name="goalAmount"
           type="number"
-          value={goalAmount}
-          onChange={(e) => setGoalAmount(e.target.value)}
+          value={formData.goalAmount}
+          onChange={handleChange}
           required
           placeholder="Hedef Tutar (₺)"
           className="border p-2 rounded-md"
@@ -120,22 +98,22 @@ const AdminUpdateCampaignPage = () => {
         <input
           name="endDate"
           type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
+          value={formData.endDate?.slice(0, 10)}
+          onChange={handleChange}
           required
           className="border p-2 rounded-md"
         />
         <input
           name="tag"
           type="text"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
+          value={formData.tags}
+          onChange={handleChange}
           required
           placeholder="Etiket (örn: kedi, köpek, tedavi)"
           className="border p-2 rounded-md"
         />
         <button
-          disabled={mutation.isPending}
+          disabled={updateCampaign.isPending}
           type="submit"
           className="bg-blue-500 text-white p-2 rounded-md"
         >

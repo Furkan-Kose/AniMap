@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Image, FlatList } from "react-native";
 import React from "react";
 import { useAnimals, apiURL } from "../../hooks/useAnimals";
 import { useRouter } from "expo-router";
@@ -7,7 +7,7 @@ import AnimalCard from "../../components/AnimalCard";
 import AnimalMap from "@/components/AnimalMap";
 
 const Index = () => {
-  const { isLoading, error, data: animals } = useAnimals();
+  const { animals, isLoading, error } = useAnimals();
   const router = useRouter();
 
   if (isLoading) return <ActivityIndicator size="large" color="#000" />;
@@ -38,7 +38,7 @@ const Index = () => {
         <Text className="text-2xl font-bold text-center mb-4">Hayvanlar</Text>
 
         {animals.length === 0 ? (
-          <Text className="text-center text-gray-600">Şu anda listelenecek hayvan yok.</Text>
+          <Text className="text-center text-gray-600 mb-4 py-8">Şu anda listelenecek hayvan yok.</Text>
         ) : (
           <View className="flex-row flex-wrap justify-between">
             {animals.map((animal: any) => (

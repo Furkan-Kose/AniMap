@@ -1,11 +1,8 @@
 import { Link, useNavigate } from "react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { AnimalType } from "../types";
-import { apiURL } from "../lib/api";
 import { useAuth } from "../context/AuthContext";
+import { useAnimals } from "../hooks/useAnimals";
 
 interface AnimalCardProps {
   animal: AnimalType;
@@ -13,25 +10,11 @@ interface AnimalCardProps {
 
 const AnimalCard: React.FC<AnimalCardProps> = ({ animal }) => {
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const deleteMutation = useMutation({
-    mutationFn: async () => {
-      await axios.delete(`${apiURL}/animals/${animal._id}`, { withCredentials: true });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["animals"] });
-      toast.success("Hayvan başarıyla silindi.");
-    },
-    onError: (error: any) => {
-      console.error("Error deleting animal:", error);
-      toast.error("Hayvan silinirken bir hata oluştu.");
-    },
-  });
+  const { deleteAnimal } = useAnimals();
 
   const handleDelete = () => {
-    deleteMutation.mutate();
+    deleteAnimal.mutate(animal._id);
   };
 
   const formattedDate = new Date(animal.createdAt).toLocaleDateString("tr-TR");

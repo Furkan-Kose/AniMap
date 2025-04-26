@@ -4,7 +4,7 @@ import { FlatList, Text, View, Image } from 'react-native'
 import { useCampaigns } from '@/hooks/useCampaigns'
 
 const Campaigns = () => {
-  const { isLoading, error, data: campaigns } = useCampaigns()
+  const { campaigns, isLoading, error } = useCampaigns()
 
   if (isLoading) return <Text className="text-center mt-10 text-lg">Yükleniyor...</Text>
   if (error) return <Text className="text-center mt-10 text-red-500">Hata: {error.message}</Text>

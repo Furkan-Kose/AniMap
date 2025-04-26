@@ -1,42 +1,21 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
 import { colorOptions, genderOptions, healthStatusOptions } from "../constants/data";
 import Select from "react-select";
 import ImageUploadModal from "../components/ImageUploadModal";
 import LocationModal from "../components/LocationModal";
+import { useAnimals } from "../hooks/useAnimals";
+import { useNavigate } from "react-router";
 
 
 const AdminAddAnimalPage = () => {
     const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
-    const navigate = useNavigate();
-    const queryClient = useQueryClient();
     const [isImageModalOpen, setImageModalOpen] = useState(false);
     const [isLocationModalOpen, setLocationModalOpen] = useState(false);
     const [image, setImage] = useState<File | null>(null);
     const [tempImage, setTempImage] = useState<string | null>(null);
   
-    const mutation = useMutation({
-      mutationFn: async (newAnimal) => {
-        return axios.post("http://localhost:3000/animals", newAnimal, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        });
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["animals"] });
-        toast.success("Hayvan başarıyla eklendi.");
-        navigate("/admin/animals");
-      },
-      onError: (error) => {
-        console.log("error" + error);
-        toast.error("Hayvan eklenirken bir hata oluştu.");
-      },
-    });
+    const { addAnimal } = useAnimals();
+    const navigate = useNavigate();
   
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -50,7 +29,11 @@ const AdminAddAnimalPage = () => {
         formData.append("image", image);
       }
   
-      mutation.mutate(formData); 
+      addAnimal.mutate(formData, {
+        onSuccess: () => {
+          navigate("/admin/animals");
+        },
+      });
     };
   
     const handleSave = (file: File | null, tempImage: string | null) => {
@@ -104,7 +87,7 @@ const AdminAddAnimalPage = () => {
           </div>
         )}
 
-        <button disabled={mutation.isPending} type="submit" className="bg-blue-500 text-white p-2 rounded-md">Ekle</button>
+        <button disabled={addAnimal.isPending} type="submit" className="bg-blue-500 text-white p-2 rounded-md">Ekle</button>
       </form>
 
         <div>

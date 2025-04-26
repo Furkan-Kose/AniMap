@@ -5,6 +5,7 @@ import Loading from "../components/Loading";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useState } from "react";
 
 const AdminUsersPage = () => {
 
@@ -14,6 +15,12 @@ const AdminUsersPage = () => {
     queryKey: ["users"],
     queryFn: () => fetchUsers(),
   });
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredUsers = users?.filter((user: any) =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const queryClient = useQueryClient();
 
@@ -51,6 +58,8 @@ const AdminUsersPage = () => {
             type="text"
             placeholder="Kullanıcı ara..."
             className="p-2 border border-gray-300 rounded-l-lg w-80"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className="bg-blue-500 text-white p-2 rounded-r-lg">
             <FaSearch />
@@ -76,7 +85,7 @@ const AdminUsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user: any) => (
+          {filteredUsers.map((user: any) => (
             <tr key={user._id} className="border-b hover:bg-gray-100">
               <td className="py-3 px-6">{user.username}</td>
               <td className="py-3 px-6">{user.email}</td>

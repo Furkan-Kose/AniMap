@@ -1,25 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useParams, Link } from "react-router";
 import { FaArrowLeft, FaPhone, FaEnvelope } from "react-icons/fa";
 import Loading from "../components/Loading";
-import { apiURL } from "../lib/api";
+import { useAnimals } from "../hooks/useAnimals";
 
-const fetchAnimal = async (id: any) => {
-  const res = await axios.get(`${apiURL}/animals/${id}`);
-  return res.data;
-};
 
 const AnimalDetailsPage = () => {
   const { id } = useParams();
 
-  const { data: animal, isPending, error } = useQuery({
-    queryKey: ["animal", id],
-    queryFn: () => fetchAnimal(id),
-  });
+  const { animal, isAnimalLoading, animalError } = useAnimals(id);
 
-  if (isPending) return <Loading />;
-  if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
+  if (isAnimalLoading) return <div className="flex items-center justify-center min-h-screen"><Loading /></div>;
+  if (animalError) return <p className="text-center text-red-500">Error: {animalError.message}</p>;
 
   const formattedDate = new Date(animal.createdAt).toLocaleDateString("tr-TR");
 

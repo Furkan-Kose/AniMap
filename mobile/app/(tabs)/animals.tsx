@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import AnimalCard from "@/components/AnimalCard";
 
 const Animals = () => {
-  const { isLoading, error, data: animals } = useAnimals();
+  const { animals, isLoading, error } = useAnimals();
 
   if (isLoading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;

@@ -1,43 +1,25 @@
 import { FaPencilAlt, FaTrashAlt, FaSearch } from "react-icons/fa";
-import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "../components/Loading";
 import { useNavigate } from "react-router";
-import { toast } from "react-toastify";
+import { useCampaigns } from "../hooks/useCampaigns";
+import { useState } from "react";
 
-const fetchCampaigns = async () => {
-  const res = await axios.get("http://localhost:3000/campaigns", { withCredentials: true });
-  return res.data;
-};
 
 const AdminCampaignsPage = () => {
   const navigate = useNavigate();
+  const { campaigns, isLoading, error, deleteCampaign } = useCampaigns();
 
-  const { isPending, error, data: campaigns } = useQuery({
-    queryKey: ["campaigns"],
-    queryFn: fetchCampaigns,
-  });
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const queryClient = useQueryClient();
+  const filteredCampaigns = campaigns?.filter((campaign: any) =>
+    campaign.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const deleteMutation = useMutation({
-    mutationFn: async (campaign: any) => {
-      await axios.delete(`http://localhost:3000/campaigns/${campaign._id}`, { withCredentials: true });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
-      toast.success("Kampanya başarıyla silindi.");
-    },
-    onError: () => {
-      toast.error("Kampanya silinirken bir hata oluştu.");
-    },
-  });
-
-  const handleDelete = (campaign: any) => {
-    deleteMutation.mutate(campaign);
+  const handleDelete = (id: string) => {
+    deleteCampaign.mutate(id);
   };
 
-  if (isPending) return <Loading />;
+  if (isLoading) return <Loading />;
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   return (
@@ -51,6 +33,8 @@ const AdminCampaignsPage = () => {
             type="text"
             placeholder="Kampanya ara..."
             className="p-2 border border-gray-300 rounded-l-lg w-80"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button className="bg-blue-500 text-white p-2 rounded-r-lg">
             <FaSearch />
@@ -77,7 +61,7 @@ const AdminCampaignsPage = () => {
           </tr>
         </thead>
         <tbody>
-          {campaigns.map((campaign: any) => (
+          {filteredCampaigns.map((campaign: any) => (
             <tr key={campaign._id} className="border-b hover:bg-gray-100">
               <td className="py-3 px-6">
                 <img src={campaign.image} alt={campaign.title} className="w-16 h-16 object-cover" />
@@ -92,7 +76,7 @@ const AdminCampaignsPage = () => {
                 >
                   <FaPencilAlt />
                 </button>
-                <button className="text-red-500" onClick={() => handleDelete(campaign)}>
+                <button className="text-red-500" onClick={() => handleDelete(campaign._id)}>
                   <FaTrashAlt />
                 </button>
               </td>

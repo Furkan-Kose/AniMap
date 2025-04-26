@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { toast } from "react-toastify";
+import { useCampaigns } from "../hooks/useCampaigns";
 
 const UpdateCampaignPage = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { id } = useParams();
+  const { campaign, isLoading, error, updateCampaign } = useCampaigns(id);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState<any>({
     title: "",
@@ -20,17 +18,6 @@ const UpdateCampaignPage = () => {
     tags: "",
   });
 
-  const { data: campaign, isLoading, error } = useQuery({
-    queryKey: ["campaign", id],
-    queryFn: async () => {
-      const res = await axios.get(`http://localhost:3000/campaigns/${id}`, {
-        withCredentials: true,
-      });
-      return res.data;
-    },
-    enabled: !!id,
-  });
-
   useEffect(() => {
     if (campaign) {
       setFormData({
@@ -39,23 +26,6 @@ const UpdateCampaignPage = () => {
       });
     }
   }, [campaign]);
-
-  const mutation = useMutation({
-    mutationFn: async (updatedData: any) => {
-      return axios.put(`http://localhost:3000/campaigns/${id}`, updatedData, {
-        withCredentials: true,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["campaigns"] });
-      toast.success("Kampanya başarıyla güncellendi.");
-      navigate("/campaigns");
-    },
-    onError: (err) => {
-      console.error("Güncelleme hatası:", err);
-      toast.error("Kampanya güncellenirken bir hata oluştu.");
-    },
-  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -74,7 +44,11 @@ const UpdateCampaignPage = () => {
       organization: user?._id,
     };
 
-    mutation.mutate(data);
+    updateCampaign.mutate(data, {
+      onSuccess: () => {
+        navigate("/campaigns");
+      },
+    });
   };
 
   if (isLoading) return <p className="text-center pt-28">Yükleniyor...</p>;
@@ -139,10 +113,10 @@ const UpdateCampaignPage = () => {
 
         <button
           type="submit"
-          disabled={mutation.isPending}
+          disabled={updateCampaign.isPending}
           className="bg-yellow-500 text-white p-2 rounded-md mt-2"
         >
-          {mutation.isPending ? "Güncelleniyor..." : "Kampanyayı Güncelle"}
+          {updateCampaign.isPending ? "Güncelleniyor..." : "Kampanyayı Güncelle"}
         </button>
       </form>
     </div>

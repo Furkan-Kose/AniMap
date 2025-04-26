@@ -1,17 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
 import Loading from "../components/Loading";
 import AnimalMap from "../components/AnimalMap";
-import { fetchAnimals } from "../lib/api";
 import AnimalCard from "../components/AnimalCard";
 import { Link } from "react-router";
+import { motion } from "motion/react"
+import { useAnimals } from "../hooks/useAnimals";
 
 const HomePage = () => {
-  const { isPending, error, data: animals } = useQuery({
-    queryKey: ["animals"],
-    queryFn: fetchAnimals,
-  });
+  const { animals, isLoading, error } = useAnimals();
 
-  if (isPending) return <Loading />
+  if (isLoading) return <div className="flex items-center justify-center min-h-screen"><Loading /></div>;
   if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   return (
@@ -20,7 +17,12 @@ const HomePage = () => {
       {/* HERO */}
       <section className="relative flex flex-col md:flex-row bg-gradient-to-br from-yellow-400 via-yellow-200 to-yellow-100 h-[75vh] overflow-hidden">
         {/* LEFT */}
-        <div className="flex flex-1 flex-col justify-center gap-6 px-6 md:px-16 xl:px-32">
+        <motion.div 
+          className="flex flex-1 flex-col justify-center gap-6 px-6 md:px-16 xl:px-32"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+        >
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
             Sokak Hayvanlarına <span className="text-yellow-600">Destek Ol!</span>
           </h1>
@@ -30,15 +32,20 @@ const HomePage = () => {
           <Link to="/add" className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg w-fit transition">
             + Hayvan Ekle
           </Link>
-        </div>
+        </motion.div>
 
         {/* RIGHT */}
-        <div className="hidden md:flex flex-1 items-center justify-center relative">
+        <motion.div 
+          className="hidden md:flex flex-1 items-center justify-center relative"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+        >
           <img src="https://pngimg.com/uploads/dog/dog_PNG50318.png" alt="Hero" className="w-full h-80 object-contain drop-shadow-lg" />
           <div className="absolute bottom-8 right-8 bg-white rounded-xl p-4 shadow-lg text-sm text-gray-600">
             <strong>{animals.length} </strong>Hayvan listelendi!
           </div>
-        </div>
+        </motion.div>
 
         {/* EĞİMLİ ALT KISIM */}
         <div className="absolute bottom-0 w-full overflow-hidden leading-0 rotate-180">
@@ -52,11 +59,17 @@ const HomePage = () => {
       {/* ANIMALS LIST */}
       <section className="pt-8">
         <h1 className="text-3xl font-bold text-center text-yellow-500">Hayvanlar</h1>
+        {animals.length === 0 ? (
+        <p className="text-gray-500 text-center py-20 text-lg">
+          Henüz hayvan bulunmamaktadır.
+        </p>
+        ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 py-8 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
           {animals.map((animal: any) => (
             <AnimalCard key={animal._id} animal={animal} />
           ))}
         </div>
+        )}
       </section>
 
       {/* MAP */}

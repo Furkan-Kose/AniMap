@@ -5,18 +5,15 @@ import { fetchCampaign } from "../lib/api";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { useCampaigns } from "../hooks/useCampaigns";
 
 const CampaignDetailPage = () => {
   const { id } = useParams();
   const { user } = useAuth();
+  const { campaign, isCampaignLoading, campaignError} = useCampaigns(id);
 
-  const { isPending, error, data: campaign } = useQuery({
-      queryKey: ["campaign", id],
-      queryFn: () => fetchCampaign(id!),
-  });
-
-  if (isPending) return <Loading />;
-  if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
+  if (isCampaignLoading) return <div className="flex items-center justify-center min-h-screen"><Loading /></div>;
+  if (campaignError) return <p className="text-center text-red-500">Error: {campaignError.message}</p>;
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 py-8">

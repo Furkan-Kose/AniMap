@@ -36,7 +36,7 @@ const ProfilePage = () => {
             <p className="text-gray-500">{user?.role || "Veri bulunamadı"}</p>
           </div>
 
-          <Link to="" className="mb-4 flex items-center border-2 border-gray-300 p-3 rounded-xl gap-4 w-2/3 mx-auto hover:bg-gray-100">
+          <Link to="/profile/update" className="mb-4 flex items-center border-2 border-gray-300 p-3 rounded-xl gap-4 w-2/3 mx-auto hover:bg-gray-100">
             <FaEdit className="text-2xl text-yellow-500" />
             <p className="text-gray-700">Profili Güncelle</p>
           </Link>

@@ -1,8 +1,7 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { Alert } from "react-native";
-
-export const apiURL = "http://192.168.1.123:3000";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+const apiURL = 'http://localhost:3000';
 
 export const useAnimals = (id?: string) => {
   const queryClient = useQueryClient();
@@ -39,11 +38,11 @@ export const useAnimals = (id?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['animals'] });
-      Alert.alert('Hayvan başarıyla eklendi.');
+      toast.success('Hayvan başarıyla eklendi.');
     },
     onError: (error: any) => {
       console.error('Error adding animal:', error);
-      Alert.alert('Hayvan eklenirken bir hata oluştu.');
+      toast.error('Hayvan eklenirken bir hata oluştu.');
     },
   });
 
@@ -59,11 +58,11 @@ export const useAnimals = (id?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['animals'] });
-      Alert.alert('Hayvan başarıyla güncellendi.');
+      toast.success('Hayvan başarıyla güncellendi.');
     },
     onError: (error: any) => {
       console.error('Error updating animal:', error);
-      Alert.alert('Hayvan güncellenirken bir hata oluştu.');
+      toast.error('Hayvan güncellenirken bir hata oluştu.');
     },
   });
 
@@ -76,11 +75,11 @@ export const useAnimals = (id?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['animals'] });
-      Alert.alert('Hayvan başarıyla silindi.');
+      toast.success('Hayvan başarıyla silindi.');
     },
     onError: (error: any) => {
       console.error('Error deleting animal:', error);
-      Alert.alert('Hayvan silinirken bir hata oluştu.');
+      toast.error('Hayvan silinirken bir hata oluştu.');
     },
   });
 

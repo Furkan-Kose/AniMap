@@ -29,6 +29,23 @@ export default function RootLayout() {
               headerTitle: 'Profil Güncelle',
             }}
           />
+          <Stack.Screen
+            name="update-animal/[id]"
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: '#eab308',
+              },
+              headerTitleStyle: {
+                color: 'white',
+                fontWeight: 'bold', 
+                fontSize: 20,
+              },
+              headerTintColor: 'white',
+              headerTitleAlign: 'left',
+              headerTitle: 'Hayvan Güncelle',
+            }}
+          />
         </Stack>
       </AuthProvider>
     </QueryClientProvider>

@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { Alert } from "react-native";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-export const apiURL = "http://192.168.1.123:3000";
+const apiURL = 'http://localhost:3000';
 
 export const useCampaigns = (id?: string) => {
   const queryClient = useQueryClient();
@@ -35,11 +35,11 @@ export const useCampaigns = (id?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['campaigns'] });
-      Alert.alert('Kampanya başarıyla eklendi.');   
+      toast.success('Kampanya başarıyla eklendi.');   
     },
     onError: (error: any) => {
       console.error('Error adding campaign:', error);
-      Alert.alert('Kampanya eklenirken bir hata oluştu.');
+      toast.error('Kampanya eklenirken bir hata oluştu.');
     },
   });
 
@@ -52,11 +52,11 @@ export const useCampaigns = (id?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['campaigns'] });
-      Alert.alert('Kampanya başarıyla güncellendi.');
+      toast.success('Kampanya başarıyla güncellendi.');
     },
     onError: (error: any) => {
       console.error('Error updating campaign:', error);
-      Alert.alert('Kampanya güncellenirken bir hata oluştu.');
+      toast.error('Kampanya güncellenirken bir hata oluştu.');
     },
   });
 
@@ -69,11 +69,11 @@ export const useCampaigns = (id?: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['campaigns'] });
-      Alert.alert('Kampanya başarıyla silindi.');
+      toast.success('Kampanya başarıyla silindi.');
     },
     onError: (error: any) => {
       console.error('Error deleting campaign:', error);
-      Alert.alert('Kampanya silinirken bir hata oluştu.');
+      toast.error('Kampanya silinirken bir hata oluştu.');
     },
   });
 
@@ -89,4 +89,3 @@ export const useCampaigns = (id?: string) => {
     deleteCampaign
   };
 };
-

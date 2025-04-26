@@ -24,6 +24,7 @@ import UpdateCampaignPage from "./pages/UpdateCampaignPage";
 import AdminCampaignsPage from "./admin/AdminCampaignsPage";
 import AdminAddCampaignPage from "./admin/AdminAddCampaignPage";
 import AdminUpdateCampaignPage from "./admin/AdminUpdateCampaignPage";
+import UpdateProfilePage from "./pages/UpdateProfilePage";
 
 
 export const router = createBrowserRouter([
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
         {
           path: "/profile",
           element: <ProfilePage />
+        },
+        {
+          path: "/profile/update",
+          element: <UpdateProfilePage />
         },
         {
           path: "/campaigns",

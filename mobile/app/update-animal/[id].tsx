@@ -1,7 +1,7 @@
 import { Text, ScrollView, View, TextInput, TouchableOpacity, Image, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Picker } from "@react-native-picker/picker";
 import ImageUploadModal from "../../components/ImageUploadModal";
 import LocationModal from "../../components/LocationModal";
@@ -9,22 +9,27 @@ import { genderOptions, colorOptions, healthStatusOptions } from "../../constant
 import { useAuth } from "@/context/AuthContext";
 import { useAnimals } from "@/hooks/useAnimals";
 
-const AddAnimal = () => {
+const UpdateAnimal = () => {
+  const { id } = useLocalSearchParams() as { id: string };
+  const { updateAnimal, animal, isAnimalLoading, animalError } = useAnimals(id);
   const { user } = useAuth();
-  const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({ latitude: null, longitude: null });
   const router = useRouter();
+
+  const [location, setLocation] = useState<{ latitude: number | null; longitude: number | null }>({
+    latitude: animal?.location?.latitude || null,
+    longitude: animal?.location?.longitude || null,
+  });
+  const [image, setImage] = useState<string | null>(animal?.image || null);
+  const [tempImage, setTempImage] = useState<string | null>(animal?.image || null);
+  const [species, setSpecies] = useState(animal?.species || "");
+  const [description, setDescription] = useState(animal?.description || "");
+  const [gender, setGender] = useState<string | null>(animal?.gender || null);
+  const [color, setColor] = useState<string | null>(animal?.color || null);
+  const [healthStatus, setHealthStatus] = useState<string | null>(animal?.healthStatus || null);
+
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
-  const [tempImage, setTempImage] = useState<string | null>(null);
-  const { addAnimal } = useAnimals();
-
-  const [species, setSpecies] = useState("");
-  const [description, setDescription] = useState("");
-  const [gender, setGender] = useState<string | null>(null);
-  const [color, setColor] = useState<string | null>(null);
-  const [healthStatus, setHealthStatus] = useState<string | null>(null);
-
+  
   const handleSubmit = () => {
     const formData: any = new FormData();
     formData.append("species", species);
@@ -43,18 +48,20 @@ const AddAnimal = () => {
       } as any);
     }
 
-    addAnimal.mutate(formData, {
-      onSuccess: () => {
-        router.push("/animals");
-        setSpecies("");
-        setDescription("");
-        setGender(null);
-        setColor(null);
-        setHealthStatus(null);
-        setLocation({ latitude: null, longitude: null });
-        setImage(null);
-        setTempImage(null);
-      }
+    updateAnimal.mutate({ id: animal._id, data: formData }, {
+        onSuccess: () => {
+          router.push("/animals");
+          setSpecies("");
+          setDescription("");
+          setGender(null);
+          setColor(null);
+          setHealthStatus(null);
+          setImage(null);
+          setTempImage(null);
+          setLocation({ latitude: null, longitude: null });
+          setImageModalOpen(false);
+          setLocationModalOpen(false);
+        },
     });
   };
 
@@ -70,23 +77,8 @@ const AddAnimal = () => {
     setLocationModalOpen(false); 
   };
 
-  if (!user) {
-    return (
-      <SafeAreaView className="flex-1 bg-gray-100 px-4 pt-6">
-        <View className="bg-white rounded-xl shadow-lg p-8 mb-6 items-center">
-          <Text className="text-lg font-semibold text-gray-600 text-center">
-            Hayvan eklemek için giriş yapmalısınız.
-          </Text>
-          <TouchableOpacity
-            onPress={() => router.push("/login")}
-            className="bg-yellow-500 py-2 px-6 rounded-full w-full flex items-center justify-center mt-4"
-          >
-            <Text className="text-white text-lg font-bold">Giriş Yap</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    );
-  }
+    if (isAnimalLoading) return <Text>Loading...</Text>;
+    if (animalError) return <Text className="text-center text-red-500">Error: {animalError.message}</Text>;
 
   return (
     <SafeAreaView edges={["left", "right", "bottom"]} className="bg-gray-100 h-full">
@@ -94,6 +86,7 @@ const AddAnimal = () => {
         <Text className="text-2xl font-bold text-center mb-4">Hayvan Ekle</Text>
 
         <TextInput
+          defaultValue={animal?.species || ""}
           value={species}
           onChangeText={setSpecies}
           placeholder="Tür"
@@ -101,6 +94,7 @@ const AddAnimal = () => {
         />
 
         <TextInput
+          defaultValue={animal?.description || ""}
           value={description}
           onChangeText={setDescription}
           placeholder="Açıklama"
@@ -163,7 +157,7 @@ const AddAnimal = () => {
           </View>
         )}
 
-        <TouchableOpacity className="bg-yellow-500 p-3 rounded-md mt-6" onPress={handleSubmit} disabled={addAnimal.isPending}>
+        <TouchableOpacity className="bg-yellow-500 p-3 rounded-md mt-6" onPress={handleSubmit} disabled={updateAnimal.isPending}>
           <Text className="text-white text-center font-bold">Ekle</Text>
         </TouchableOpacity>
 
@@ -174,4 +168,4 @@ const AddAnimal = () => {
   );
 };
 
-export default AddAnimal;
+export default UpdateAnimal;
