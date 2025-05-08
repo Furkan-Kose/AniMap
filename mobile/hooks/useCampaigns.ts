@@ -30,6 +30,9 @@ export const useCampaigns = (id?: string) => {
   const addCampaign = useMutation({
     mutationFn: async (newCampaign) => {
       await axios.post(`${apiURL}/campaigns`, newCampaign, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
         withCredentials: true,
       });
     },
@@ -47,6 +50,9 @@ export const useCampaigns = (id?: string) => {
   const updateCampaign = useMutation({
     mutationFn: async (updatedCampaign: any) => {
       await axios.put(`${apiURL}/campaigns/${updatedCampaign._id}`, updatedCampaign, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
         withCredentials: true,
       });
     },

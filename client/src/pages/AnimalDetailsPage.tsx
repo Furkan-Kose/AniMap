@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router";
-import { FaArrowLeft, FaPhone, FaEnvelope } from "react-icons/fa";
+import { FaArrowLeft, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import Loading from "../components/Loading";
 import { useAnimals } from "../hooks/useAnimals";
 
@@ -13,6 +13,8 @@ const AnimalDetailsPage = () => {
   if (animalError) return <p className="text-center text-red-500">Error: {animalError.message}</p>;
 
   const formattedDate = new Date(animal.createdAt).toLocaleDateString("tr-TR");
+
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${animal.location.latitude},${animal.location.longitude}`;
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-28 pb-16 min-h-screen">
@@ -36,7 +38,7 @@ const AnimalDetailsPage = () => {
             <div className="p-8 flex flex-col justify-between">
               <div>
                 <h2 className="text-4xl font-bold text-gray-800 mb-2">{animal.species}</h2>
-                <p className="text-sm text-gray-500 mb-6">İlan Tarihi: {formattedDate}</p>
+                <p className="text-sm text-gray-500 mb-6">Eklenme Tarihi: {formattedDate}</p>
 
                 <p className="text-gray-700 mb-6 leading-relaxed">{animal.description}</p>
 
@@ -61,6 +63,9 @@ const AnimalDetailsPage = () => {
                       </a>
                       <a href={`mailto:${animal.owner.email}`} className="flex items-center gap-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 transition">
                         <FaEnvelope /> Mail Gönder
+                      </a>
+                      <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg text-sm hover:bg-green-700 transition">
+                        <FaMapMarkerAlt /> Yol Tarifi Al
                       </a>
                     </div>
                   </div>

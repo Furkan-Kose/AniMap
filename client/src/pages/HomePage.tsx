@@ -27,10 +27,10 @@ const HomePage = () => {
             Sokak Hayvanlarına <span className="text-yellow-600">Destek Ol!</span>
           </h1>
           <p className="text-lg text-gray-700">
-            Birlikte onların hayatını değiştirebiliriz. Fotoğraf ve bilgilerini paylaş, sahiplenmelerine destek ol!
+          Birlikte sokak hayvanlarının hayatlarını iyileştirebiliriz. Fotoğraflarını ve bilgilerini paylaşarak onlara yardım eli uzat!
           </p>
           <Link to="/add" className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg w-fit transition">
-            + Hayvan Ekle
+            Hayvan Ekle
           </Link>
         </motion.div>
 

@@ -46,6 +46,40 @@ export default function RootLayout() {
               headerTitle: 'Hayvan Güncelle',
             }}
           />
+          <Stack.Screen
+            name="(campaigns)/add-campaign"
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: '#eab308',
+              },
+              headerTitleStyle: {
+                color: 'white',
+                fontWeight: 'bold', 
+                fontSize: 20,
+              },
+              headerTintColor: 'white',
+              headerTitleAlign: 'left',
+              headerTitle: 'Kampanya Ekle',
+            }}
+          />
+          <Stack.Screen
+            name="(campaigns)/update-campaign/[id]"
+            options={{
+              headerShown: true,
+              headerStyle: {
+                backgroundColor: '#eab308',
+              },
+              headerTitleStyle: {
+                color: 'white',
+                fontWeight: 'bold', 
+                fontSize: 20,
+              },
+              headerTintColor: 'white',
+              headerTitleAlign: 'left',
+              headerTitle: 'Kampanya Güncelle',
+            }}
+          />
         </Stack>
       </AuthProvider>
     </QueryClientProvider>

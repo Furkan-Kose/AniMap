@@ -22,8 +22,7 @@ const Index = () => {
             Sokak Hayvanlarına Destek Ol!
           </Text>
           <Text className="text-white text-center mt-2">
-            Bu platform ile yardıma muhtaç hayvanları listeleyebilir ve onlara
-            yardım edebilirsiniz.
+            Birlikte sokak hayvanlarının hayatlarını iyileştirebiliriz. Fotoğraflarını ve bilgilerini paylaşarak onlara yardım eli uzat!
           </Text>
 
           <TouchableOpacity
