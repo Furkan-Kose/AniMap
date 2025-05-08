@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { FaSave } from "react-icons/fa";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { apiURL } from "../lib/api";
 
 const UpdateProfilePage = () => {
   const { user } = useAuth();
@@ -24,7 +25,7 @@ const UpdateProfilePage = () => {
 
   const mutation = useMutation({
       mutationFn: async (updatedUser) => {
-        return axios.put(`http://localhost:3000/users/${user?._id}`, updatedUser, { withCredentials: true });
+        return axios.put(`${apiURL}/users/${user?._id}`, updatedUser, { withCredentials: true });
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["users"] });

@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
-const apiURL = 'http://localhost:3000';
+import { apiURL } from '../lib/api';
 
 export const useCampaigns = (id?: string) => {
   const queryClient = useQueryClient();

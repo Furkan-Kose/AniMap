@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
+import { apiURL } from "../lib/api";
 
 const AdminUsersPage = () => {
 
@@ -26,7 +27,7 @@ const AdminUsersPage = () => {
 
   const deleteMutation = useMutation({
       mutationFn: async (user: any) => {
-        await axios.delete(`http://localhost:3000/users/${user._id}`, 
+        await axios.delete(`${apiURL}/users/${user._id}`, 
           { withCredentials: true }
         );
       },

@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { roleOptions } from "../constants/data";
 import Select from "react-select";
 import { useState } from "react";
+import { apiURL } from "../lib/api";
 
 
 
@@ -18,7 +19,7 @@ const AdminAddUserPage = () => {
   
     const mutation = useMutation({
       mutationFn: async (userData) => {
-        return axios.post("http://localhost:3000/users", userData, { withCredentials: true });
+        return axios.post(`${apiURL}/users`, userData, { withCredentials: true });
       },
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["users"] });

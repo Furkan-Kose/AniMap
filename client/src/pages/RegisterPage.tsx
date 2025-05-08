@@ -3,9 +3,10 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { apiURL } from "../lib/api";
 
 const registerUser = async (userData: any) => {
-  const response = await axios.post("http://localhost:3000/users/register", userData, {withCredentials: true});
+  const response = await axios.post(`${apiURL}/users/register`, userData, {withCredentials: true});
   return response.data;
 };
 

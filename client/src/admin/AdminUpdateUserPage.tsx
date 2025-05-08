@@ -6,6 +6,7 @@ import { roleOptions } from "../constants/data";
 import Select from "react-select";
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
+import { apiURL } from "../lib/api";
 
 const AdminUpdateUserPage = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const AdminUpdateUserPage = () => {
   const { data: user, isLoading } = useQuery({
     queryKey: ["user", id],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:3000/users/${id}`);
+      const res = await axios.get(`${apiURL}/users/${id}`);
       return res.data;
     },
     enabled: !!id,
@@ -36,7 +37,7 @@ const AdminUpdateUserPage = () => {
 
   const mutation = useMutation({
     mutationFn: async (updatedUser) => {
-      return axios.put(`http://localhost:3000/users/${id}`, updatedUser, { withCredentials: true });
+      return axios.put(`${apiURL}/users/${id}`, updatedUser, { withCredentials: true });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
