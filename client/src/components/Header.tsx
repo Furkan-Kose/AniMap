@@ -46,9 +46,9 @@ const Header = () => {
       ${isMenuOpen ? "bg-yellow-100/75 backdrop-blur-md" : ""}`}
     >
         {/* Logo & Brand */}
-        <div className="text-3xl font-semibold tracking-wider uppercase">
+        <div className="text-3xl font-semibold tracking-wider">
           <Link to="/" className="text-gray-800 hover:text-gray-600">
-            Logo
+            PatiMap
           </Link>
         </div>
 
