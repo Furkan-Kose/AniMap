@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const apiURL = "https://animap.onrender.com/";
+export const apiURL = "https://animap.onrender.com";
 
 export const fetchAnimals = async () => {
     const res = await axios.get(`${apiURL}/animals`);
