@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "react-router";
-import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";

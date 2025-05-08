@@ -17,7 +17,7 @@ const RegisterPage = () => {
 
   const { mutate: register, isPending, isError, error } = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("User registered successfully");
       navigate("/login"); 
     },

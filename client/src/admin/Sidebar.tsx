@@ -1,6 +1,6 @@
 "use client";
 
-import { FaHome, FaUser, FaCog, FaSignOutAlt, FaDog, FaArrowLeft, FaBullhorn } from "react-icons/fa";
+import { FaHome, FaUser, FaCog, FaDog, FaArrowLeft, FaBullhorn } from "react-icons/fa";
 
 const Sidebar = ({ isCollapsed, setIsCollapsed }: any) => {
   const menuItems = [

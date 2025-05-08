@@ -1,7 +1,4 @@
-import React from "react";
 import { useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { fetchCampaign } from "../lib/api";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";

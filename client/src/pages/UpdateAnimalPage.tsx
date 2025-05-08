@@ -19,7 +19,7 @@ const UpdateAnimalPage = () => {
   });
 
   const [image, setImage] = useState<File | null>(animal?.image || "");
-  const [tempImage, setTempImage] = useState<string | null>(animal?.image || "");
+  const [, setTempImage] = useState<string | null>(animal?.image || "");
   const [isImageModalOpen, setImageModalOpen] = useState(false);
   const [isLocationModalOpen, setLocationModalOpen] = useState(false);
 
