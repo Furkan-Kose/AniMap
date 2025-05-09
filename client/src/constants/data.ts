@@ -9,6 +9,8 @@ export const healthStatusOptions = [
     { value: "Yaralı", label: "Yaralı" },
     { value: "Hasta", label: "Hasta" },
     { value: "Kritik", label: "Kritik Durumda" },
+    { value: "Saldırgan", label: "Saldırgan" },
+    { value: "Sahipsiz", label: "Sahipsiz" },
     { value: "Bilinmiyor", label: "Bilinmiyor" },
 ];
 
@@ -19,14 +21,15 @@ export const colorOptions = [
     { value: "Kahverengi", label: "Kahverengi" },
     { value: "Sarı", label: "Sarı" },
     { value: "Turuncu", label: "Turuncu" },
+    { value: "Diğer", label: "Diğer" },
 ];
 
 export const roleOptions = [
     { value: "user", label: "Kullanıcı" },
     { value: "admin", label: "Admin" },
     { value: "stk", label: "STK" },
+    { value: "belediye", label: "Belediye" },
 ]
-
 
 export const districts = [
     { name: "Tümü", lat: 41.0082, lon: 28.9784, zoom: 11 },

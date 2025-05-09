@@ -14,12 +14,12 @@ const AdminLayout = () => {
     if (loading) return;
     if (!user) {
       navigate("/login");
-    } else if (user?.role !== "admin") {
+    } else if (user?.role !== "admin" && user?.role !== "belediye") {
       navigate("/"); 
     }
   }, [user, loading, navigate]);
 
-  if (loading || !user || user.role !== "admin") {
+  if (loading || !user || user.role !== "admin" && user.role !== "belediye") {
     return (
       <div className="w-screen h-screen flex justify-center items-center bg-gray-100 z-10">
         <Loading />

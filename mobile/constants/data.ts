@@ -9,6 +9,8 @@ export const healthStatusOptions = [
     { value: "Yaralı", label: "Yaralı" },
     { value: "Hasta", label: "Hasta" },
     { value: "Kritik", label: "Kritik Durumda" },
+    { value: "Saldırgan", label: "Saldırgan" },
+    { value: "Sahipsiz", label: "Sahipsiz" },
     { value: "Bilinmiyor", label: "Bilinmiyor" },
 ];
 
@@ -19,4 +21,5 @@ export const colorOptions = [
     { value: "Kahverengi", label: "Kahverengi" },
     { value: "Sarı", label: "Sarı" },
     { value: "Turuncu", label: "Turuncu" },
+    { value: "Diğer", label: "Diğer" },
 ];
