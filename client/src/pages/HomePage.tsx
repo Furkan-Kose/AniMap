@@ -154,9 +154,9 @@ const HomePage = () => {
           {/* RIGHT - IMAGE */}
           <div className="flex-1 flex justify-center mt-8 md:mt-0">
             <img 
-              src="https://img.freepik.com/free-psd/mobile-phone-with-white-screen-psd-mockup_1409-3967.jpg?t=st=1745058526~exp=1745062126~hmac=4954d6c5c7c2f352c4da52db7a00b346b73906b4c7acc001e66402eb6c3def46&w=1060" 
+              src="mobile.png" 
               alt="Mobil Uygulama Görseli"
-              className="w-72 md:w-80 rounded-3xl shadow-xl transition-all transform hover:scale-105"
+              className="w-36 md:w-48 rounded-xl shadow-xl transition-all transform hover:scale-105"
             />
           </div>
 
