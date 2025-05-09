@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Alert } from "react-native";
 
-export const apiURL = "http://192.168.1.123:3000";
+export const apiURL = "https://animap.onrender.com";
 
 export const useCampaigns = (id?: string) => {
   const queryClient = useQueryClient();
